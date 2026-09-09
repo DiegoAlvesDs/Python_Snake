@@ -1,80 +1,87 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00c060,100:0a5c2e&height=200&section=header&text=%F0%9F%90%8D%20Python%20Snake&fontSize=40&fontColor=ffffff&animation=fadeIn&desc=Um%20jogo%20da%20cobrinha%20evolu%C3%ADdo%20%E2%80%94%20skins%2C%20temas%2C%20ranking%20global%20e%20mais&descSize=15&descAlignY=72" alt="Banner"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:051b12,35:08783b,70:00c060,100:8dffb5&height=255&section=header&text=%F0%9F%90%8D%20Python%20Snake&fontSize=52&fontColor=ffffff&fontAlignY=38&animation=fadeIn&desc=O%20cl%C3%A1ssico%20renasceu.%20Mais%20skins%2C%20mais%20mundos%2C%20mais%20desafios.&descSize=18&descAlignY=63&descColor=d9ffe7" alt="Python Snake Banner"/>
+
+<div align="center">
 
 # 🐍 Python Snake
 
-Um jogo da cobrinha que comecei em Python e evoluí até uma versão completa para Web — com loja de skins, temas animados, ranking global e progresso salvo na nuvem.
+### Uma experiência Snake moderna, vibrante e viciante.
 
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+Do primeiro jogo em Python a uma aventura completa para web: explore mundos animados, conquiste skins raras, evolua seu perfil e dispute seu lugar no ranking global.
 
-🎮 **[JOGAR AGORA](https://diegoalvesds.github.io/python-snake/)** — funciona no PC e no celular!
+[![Jogar agora](https://img.shields.io/badge/%F0%9F%8E%AE%20JOGAR%20AGORA-00B85A?style=for-the-badge&logo=googlechrome&logoColor=white)](https://diegoalvesds.github.io/python-snake/)
+[![GitHub](https://img.shields.io/badge/Ver%20c%C3%B3digo-171717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/DiegoAlvesDs/python-snake)
 
----
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=111111)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
 
-## ✨ Funcionalidades
+</div>
+
+> “Não é só uma cobrinha. É um universo para dominar.”
+
+## ✨ O que torna o Python Snake especial?
 
 | | |
-|---|---|
-| 💎 **50+ skins** | Da Sólida grátis até a Lendária, Fênix e Dragão Ancestral — cada uma com efeitos visuais próprios |
-| 🎨 **23 temas** | Cenários vivos e animados: Cosmos com buraco negro, Vulcão com lava, Tempestade com relâmpagos, Sakura, Abismo e mais |
-| 🗺️ **9 modos de mapa** | Clássico, Sem Parede, Infinito, Velocidade, Tempo, Obstáculos, Caos, Espelho e Gigante 2x |
-| 🏆 **Ranking global** | Dispute sua posição em cada modo, com pontuação, tempo e dificuldade |
-| 🔐 **Login e progresso na nuvem** | Entre com Google, Facebook ou e-mail e sincronize moedas, XP, skins e nick (Supabase) |
-| 📱 **PC e celular** | Teclado (WASD/setas) no PC; swipe, D-pad e vibração no celular |
-| 👁 **Prévia de skins** | Uma cobrinha IA de demonstração mostra a skin em ação antes de você comprar |
+|:--|:--|
+| **💎 Colecione o impossível**<br>Mais de **50 skins** para desbloquear — da clássica Sólida às lendárias Fênix e Dragão Ancestral. | **🎨 Jogue em mundos vivos**<br>São **23 temas animados**: Cosmos, Vulcão, Tempestade, Sakura, Abismo e muitos outros. |
+| **🗺️ Nunca jogue a mesma partida**<br>Escolha entre **9 modos**: Clássico, Sem Parede, Infinito, Velocidade, Tempo, Obstáculos, Caos, Espelho e Gigante 2x. | **🏆 Prove que você é o melhor**<br>Dispute o **ranking global** com registros de pontuação, tempo e dificuldade. |
+| **☁️ Seu progresso, onde você estiver**<br>Login por Google, Facebook ou e-mail; moedas, XP, skins e nickname sincronizados na nuvem. | **📱 Feito para qualquer tela**<br>Jogue no computador com teclado ou no celular com swipe, D-pad e vibração. |
 
----
+## 🎮 Entre no jogo
 
-## 🎮 Como jogar
-
-1. Escolha o **nick**, o **tema**, a **dificuldade** (Normal ou Insano) e o **modo de mapa**
-2. Clique em **▶ PLAY**
-3. Controle a cobra, coma as maçãs e não encoste no próprio corpo!
+```text
+1. Escolha seu nick
+2. Defina tema, dificuldade e modo
+3. Pressione PLAY
+4. Coma maçãs, acumule moedas e sobreviva
+5. Evolua, desbloqueie itens e domine o ranking
+```
 
 | Plataforma | Controles |
-|---|---|
-| 💻 PC | Setas ou `WASD` · `ESC` pausa |
-| 📱 Celular | Deslize na tela (swipe) ou use o D-pad |
+|:--|:--|
+| 💻 **Computador** | Setas direcionais ou `WASD` · `ESC` para pausar |
+| 📱 **Celular** | Deslize pela tela ou utilize o D-pad virtual |
 
-Cada maçã vale moedas 🪙 e pontos que viram XP ⭐ — suba de nível para desbloquear skins exclusivas na loja.
+Cada maçã conquistada rende **pontos** e **moedas**. Seus pontos viram XP, seu XP aumenta seu nível e seu nível abre caminho para itens cada vez mais raros.
 
----
+## 🌌 Recursos em destaque
 
-## 🛠️ Tecnologias
+- 👁️ **Prévia inteligente de skins** — uma cobra IA apresenta cada visual em movimento antes da compra.
+- ⚡ **Dificuldade Normal e Insano** — para jogar de forma relaxada ou testar seus reflexos no limite.
+- 🪙 **Economia e progressão** — jogue, evolua, acumule moedas e desbloqueie seu estilo.
+- 📋 **Novidades dentro do jogo** — acompanhe todas as mudanças pelo botão “📋 Novidades da versão”.
+- 🔥 **Efeitos visuais e temas dinâmicos** — cada cenário entrega uma energia diferente para a partida.
 
-- **JavaScript** — lógica do jogo, canvas, física e colisões
-- **HTML5 + CSS3** — interface responsiva com temas dinâmicos
-- **Supabase** — autenticação (OAuth + magic link) e sincronização de progresso/ranking
-- **Canvas API** — renderização do mapa, skins e efeitos
+## 🛠️ Construído com
 
----
+| Tecnologia | Papel no projeto |
+|:--|:--|
+| **JavaScript** | Lógica do jogo, movimentação, física, colisões e sistemas |
+| **HTML5 + CSS3** | Interface responsiva, menus e temas dinâmicos |
+| **Canvas API** | Mapa, cobra, alimentos, skins e efeitos visuais |
+| **Supabase** | Autenticação, progresso na nuvem e ranking global |
 
-## 🚀 Rodar localmente
-
-É só clonar (ou baixar) e abrir o `index.html` no navegador:
+## 🚀 Rode localmente
 
 ```bash
 git clone https://github.com/DiegoAlvesDs/python-snake.git
 ```
 
-Não precisa instalar nada — o jogo roda 100% no navegador.
+Depois, abra o arquivo `index.html` no navegador.
 
----
+> Nenhuma instalação é necessária. O jogo roda diretamente no navegador.
 
-## 📋 Histórico de versões
+<div align="center">
 
-O jogo está em constante evolução! As novidades de cada versão ficam registradas no próprio jogo, no botão **"📋 Novidades da versão"** do menu.
+## Pronto para crescer?
 
----
+[![Jogar Python Snake](https://img.shields.io/badge/%F0%9F%90%8D%20Come%C3%A7ar%20a%20jogar-00C060?style=for-the-badge&logo=gamepad&logoColor=white)](https://diegoalvesds.github.io/python-snake/)
 
-## 👨‍💻 Sobre
+Feito com dedicação por [**Diego Alves**](https://github.com/DiegoAlvesDs).
 
-Feito por **[Diego Alves](https://github.com/DiegoAlvesDs)** como projeto de estudo de JavaScript, evoluindo versão após versão desde a primeira cobrinha em Python.
+Se gostou do projeto, deixe uma ⭐ — ela ajuda esse universo a continuar evoluindo.
 
-⭐ Se divertiu ou gostou do projeto, deixe uma estrela!
+</div>
 
----
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00c060,100:0a5c2e&height=100&section=footer" alt="Rodapé"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:8dffb5,45:00c060,75:08783b,100:051b12&height=150&section=footer" alt="Rodapé"/>
