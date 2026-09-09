@@ -381,14 +381,19 @@ const T = {
     Floresta:  [[5, 18, 7], [15, 50, 20], [25, 75, 30], [130, 190, 135]],
     Deserto:   [[35, 25, 10], [90, 70, 30], [130, 100, 45], [235, 205, 145]],
     Cyberpunk: [[10, 5, 20], [40, 10, 60], [70, 15, 100], [255, 60, 220]],
-    Cosmos:    [[2, 2, 10], [10, 8, 30], [18, 14, 50], [160, 130, 255]],
     Monocromo: [[10, 10, 10], [40, 40, 40], [70, 70, 70], [225, 225, 225]],
     PorDoSol:  [[30, 10, 20], [80, 20, 40], [130, 40, 50], [255, 150, 90]],
     Menta:     [[5, 20, 15], [10, 50, 35], [15, 75, 55], [140, 230, 190]],
     Vinho:     [[20, 5, 10], [60, 10, 25], [90, 15, 40], [230, 120, 150]],
     Esmeralda: [[3, 20, 12], [8, 55, 30], [12, 80, 45], [110, 230, 150]],
     Ametista:  [[15, 5, 25], [45, 15, 70], [70, 25, 105], [190, 140, 230]],
-    Cobre:     [[20, 10, 5], [70, 35, 15], [110, 55, 25], [230, 150, 90]]
+    Cobre:     [[20, 10, 5], [70, 35, 15], [110, 55, 25], [230, 150, 90]],
+    Cosmos:    [[2, 2, 10], [10, 8, 30], [18, 14, 50], [160, 130, 255]],
+    Abismo:    [[1, 8, 20], [4, 22, 42], [6, 34, 60], [80, 200, 255]],
+    Vulcao:    [[18, 4, 2], [38, 10, 6], [58, 16, 8], [255, 140, 60]],
+    Tempestade:[[6, 8, 14], [16, 20, 32], [22, 28, 46], [150, 190, 255]],
+    Retro:     [[10, 4, 24], [26, 8, 48], [38, 12, 68], [255, 70, 200]],
+    Sakura:    [[17, 6, 22], [40, 14, 46], [62, 22, 68], [255, 175, 205]]
 };
 
 /* =========================================================
@@ -422,7 +427,7 @@ function modoEncolheMapa() {
     return mapMode === 'Classico' || mapMode === 'SemParede' || mapMode === 'Obstaculos';
 }
 function quantidadeMacas() {
-    return (mapMode === 'Classico') ? 4 : 2;
+    return (mapMode === 'Classico') ? 6 : 4;
 }
 
 /* =========================================================
@@ -2173,10 +2178,16 @@ function move() {
     na colisão. Para as outras partes da cobra,
     a colisão continua normal.
     */
+    /* No 2x a cabeça também encosta nos segmentos seguintes
+       ao fazer CURVAS (o bloco 2x2 da cabeça passa por cima
+       dos blocos 2x2 que estão 1 célula atrás na curva).
+       Então ignoramos os primeiros segmentos proporcionais
+       à escala — a colisão real (corpo de trás, parede,
+       obstáculo) continua valendo. */
+    const ignoraAte = escala > 1 ? escala * 2 : 0;
     const colidiuCorpo = s.some((p, i) => {
         if (i === 0) return false;
-        // Na cobra 2x, ignora o segmento imediatamente atrás da cabeça
-        if (escala > 1 && i === 1) return false;
+        if (escala > 1 && i <= ignoraAte) return false;
         const celulasCorpo = celulasOcupadasPorSegmento(p);
         return celulasCorpo.some(bc =>
             celulasHead.some(hc =>
@@ -2250,30 +2261,43 @@ function move() {
    brilhante, reflexo de luz, cabinho e folha — pulsa
    suavemente. `semGlow` desliga o brilho caro quando há
    muitas maçãs na tela (arena online), aliviando o render. */
-function desenharMaca(gM, mx, my, cellM, tempoM, semGlow) {
+function desenharMaca(gM, mx, my, cellM, tempoM, semGlow, hueM) {
     const pulsoM = Math.sin(tempoM / 320 + (mx + my) * 0.35) * 0.5 + 0.5;
     const cxa = mx + cellM / 2;
     const cya = my + cellM * 0.56;
     const raio = cellM * (0.29 + pulsoM * 0.025);
+    /* hueM = matiz da maçã colorida (RGB). Sem ele, maçã vermelha. */
+    const eRgb = typeof hueM === 'number';
+    const hue = eRgb ? hueM : 0;
     if (!semGlow) {
-        gM.shadowBlur = cellM * (0.14 + pulsoM * 0.2);
-        gM.shadowColor = 'rgba(255, 45, 45, .8)';
+        gM.shadowBlur = cellM * (eRgb ? 0.18 : 0.22 + pulsoM * 0.26);
+        gM.shadowColor = eRgb
+            ? `hsla(${hue}, 90%, 55%, .8)`
+            : 'rgba(255, 45, 45, .8)';
     }
     const brilhoM = gM.createRadialGradient(cxa - raio * 0.3, cya - raio * 0.35, raio * 0.15, cxa, cya, raio * 1.15);
-    brilhoM.addColorStop(0, '#ff6b5e');
-    brilhoM.addColorStop(0.45, '#e8262f');
-    brilhoM.addColorStop(1, '#9c0f18');
+    if (eRgb) {
+        brilhoM.addColorStop(0, `hsl(${hue}, 95%, 68%)`);
+        brilhoM.addColorStop(0.45, `hsl(${hue}, 85%, 50%)`);
+        brilhoM.addColorStop(1, `hsl(${(hue + 40) % 360}, 80%, 28%)`);
+    } else {
+        brilhoM.addColorStop(0, '#ff6b5e');
+        brilhoM.addColorStop(0.45, '#e8262f');
+        brilhoM.addColorStop(1, '#9c0f18');
+    }
     gM.fillStyle = brilhoM;
     gM.beginPath();
     gM.arc(cxa, cya, raio, 0, Math.PI * 2);
     gM.fill();
     gM.shadowBlur = 0;
-    gM.fillStyle = 'rgba(255, 255, 255, .4)';
+    gM.fillStyle = eRgb
+        ? `hsla(${(hue + 60) % 360}, 100%, 88%, .5)`
+        : 'rgba(255, 255, 255, .48)';
     gM.beginPath();
     gM.ellipse(cxa - raio * 0.34, cya - raio * 0.32, raio * 0.24, raio * 0.15, -0.6, 0, Math.PI * 2);
     gM.fill();
     if (semGlow) return; /* em mapa cheio, cabinho e folha são cortados */
-    gM.strokeStyle = '#5c3a12';
+    gM.strokeStyle = eRgb ? `hsl(${(hue + 20) % 360}, 60%, 25%)` : '#5c3a12';
     gM.lineWidth = Math.max(1, cellM * 0.05);
     gM.lineCap = 'round';
     gM.beginPath();
@@ -2281,7 +2305,7 @@ function desenharMaca(gM, mx, my, cellM, tempoM, semGlow) {
     gM.quadraticCurveTo(cxa + raio * 0.08, cya - raio * 1.15, cxa + raio * 0.22, cya - raio * 1.28);
     gM.stroke();
     gM.lineCap = 'butt';
-    gM.fillStyle = '#3f8c1e';
+    gM.fillStyle = eRgb ? `hsl(${(hue + 90) % 360}, 65%, 35%)` : '#3f8c1e';
     gM.beginPath();
     gM.ellipse(cxa + raio * 0.52, cya - raio * 1.1, raio * 0.4, raio * 0.18, -0.5, 0, Math.PI * 2);
     gM.fill();
@@ -2304,7 +2328,10 @@ function desenharCosmos(area, cell) {
         const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
         return x - Math.floor(x);
     };
-    const chave = [area.x, area.y, area.size, cell].join('|');
+    /* Arredonda as medidas: pixels fracionários oscilam uns
+       décimos entre frames e invalidariam o cache TODA hora
+       (reconstruindo o cenário 60x/s = crash). */
+    const chave = [Math.round(area.x), Math.round(area.y), Math.round(area.size), Math.round(cell)].join('|');
     if (cosmosCache.chave !== chave) {
         cosmosCache = { chave, nebulosas: [], halo: null, nucleo: null, esfera: null, galaxias: [], bhx: 0, bhy: 0, raioB: 0, plx: 0, ply: 0, raioP: 0 };
         cosmosCache.nebulosas = [[0.28, 0.6, [120, 60, 220], 0.16, 0.36],
@@ -2523,6 +2550,879 @@ function desenharCosmos(area, cell) {
     }
 }
 
+/* =========================================================
+   CENÁRIOS ANIMADOS DOS TEMAS — versão caprichada
+   O fundo estático de cada tema (montanhas, silhuetas,
+   gradientes, luzes) é desenhado UMA vez em um canvas
+   invisível e colado por drawImage a cada quadro. Por
+   cima passam só as partículas animadas (chuva, brasas,
+   pétalas...). Cenário rico sem pesar no celular.
+========================================================= */
+const cenarioCache = {};
+const rndC = n => {
+    const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+    return x - Math.floor(x);
+};
+function novoBaseCenario(tema, area, cell) {
+    const S = area.size;
+    const bc = document.createElement('canvas');
+    bc.width = S; bc.height = S;
+    const b = bc.getContext('2d');
+    const c = { chave: [tema, Math.round(area.x), Math.round(area.y), Math.round(area.size), Math.round(cell)].join('|'), area, cell, base: bc };
+    if (tema === 'Abismo') {
+        /* água em camadas de profundidade */
+        const agua = b.createLinearGradient(0, 0, 0, S);
+        agua.addColorStop(0, 'rgba(8, 34, 62, 1)');
+        agua.addColorStop(0.55, 'rgba(4, 20, 40, 1)');
+        agua.addColorStop(1, 'rgba(2, 10, 24, 1)');
+        b.fillStyle = agua;
+        b.fillRect(0, 0, S, S);
+        /* feixes de luz descendo da superfície */
+        [0.16, 0.4, 0.64, 0.86].forEach((fx, i) => {
+            const rx = S * fx;
+            const feixe = b.createLinearGradient(rx, 0, rx + S * 0.08, S * 0.72);
+            feixe.addColorStop(0, `rgba(120, 215, 255, ${0.16 - i * 0.02})`);
+            feixe.addColorStop(1, 'rgba(120, 215, 255, 0)');
+            b.fillStyle = feixe;
+            b.beginPath();
+            b.moveTo(rx - S * 0.012, 0);
+            b.lineTo(rx + S * 0.068, 0);
+            b.lineTo(rx + S * 0.125, S * 0.72);
+            b.lineTo(rx + S * 0.02, S * 0.72);
+            b.fill();
+        });
+        /* rochas do fundo */
+        b.fillStyle = 'rgba(5, 13, 19, .95)';
+        [[0.08, 0.05], [0.28, 0.035], [0.52, 0.06], [0.78, 0.04], [0.94, 0.055]].forEach(rd => {
+            b.beginPath();
+            b.ellipse(S * rd[0], S - S * rd[1] * 0.4, S * rd[1] * 1.7, S * rd[1], 0, Math.PI, 0);
+            b.fill();
+        });
+        /* corais em leque com pontinhas brilhantes */
+        [0.13, 0.48, 0.9].forEach((cx2, i) => {
+            const bx = S * cx2, by = S * 0.985, alt = S * (0.055 + rndC(i) * 0.035);
+            b.strokeStyle = 'rgba(13, 42, 50, .95)';
+            b.lineWidth = Math.max(2, cell * 0.12);
+            for (let br = -2; br <= 2; br++) {
+                b.beginPath();
+                b.moveTo(bx, by);
+                b.quadraticCurveTo(bx + br * alt * 0.3, by - alt * 0.6, bx + br * alt * 0.55, by - alt);
+                b.stroke();
+                b.fillStyle = 'rgba(90, 230, 235, .85)';
+                b.beginPath();
+                b.arc(bx + br * alt * 0.55, by - alt, Math.max(1, cell * 0.055), 0, Math.PI * 2);
+                b.fill();
+            }
+        });
+        /* conchinhas claras espalhadas */
+        for (let q = 0; q < 9; q++) {
+            b.fillStyle = 'rgba(150, 200, 210, .28)';
+            b.beginPath();
+            b.ellipse(S * rndC(q + 90), S * (0.958 + rndC(q) * 0.03), cell * 0.15, cell * 0.07, 0, 0, Math.PI * 2);
+            b.fill();
+        }
+    } else if (tema === 'Vulcao') {
+        /* céu quente em camadas */
+        const ceu = b.createLinearGradient(0, 0, 0, S);
+        ceu.addColorStop(0, 'rgba(10, 3, 2, 1)');
+        ceu.addColorStop(0.55, 'rgba(30, 8, 4, 1)');
+        ceu.addColorStop(1, 'rgba(18, 5, 3, 1)');
+        b.fillStyle = ceu;
+        b.fillRect(0, 0, S, S);
+        /* brilho quente do horizonte */
+        const hor = b.createLinearGradient(0, S * 0.52, 0, S);
+        hor.addColorStop(0, 'rgba(255, 90, 30, 0)');
+        hor.addColorStop(1, 'rgba(255, 90, 30, .17)');
+        b.fillStyle = hor;
+        b.fillRect(0, S * 0.52, S, S * 0.48);
+        /* cordilheira distante em camadas */
+        b.fillStyle = 'rgba(28, 9, 7, .9)';
+        b.beginPath();
+        b.moveTo(0, S * 0.95);
+        b.lineTo(S * 0.16, S * 0.6);
+        b.lineTo(S * 0.38, S * 0.92);
+        b.lineTo(S * 0.6, S * 0.64);
+        b.lineTo(S * 0.84, S * 0.93);
+        b.lineTo(S, S * 0.68);
+        b.lineTo(S, S);
+        b.lineTo(0, S);
+        b.fill();
+        /* vulcão vizinho (fundo) */
+        b.fillStyle = 'rgba(16, 5, 4, .95)';
+        b.beginPath();
+        b.moveTo(S * 0.6, S * 0.94);
+        b.lineTo(S * 0.665, S * 0.78);
+        b.lineTo(S * 0.7, S * 0.78);
+        b.lineTo(S * 0.77, S * 0.94);
+        b.fill();
+        /* vulcão principal */
+        const vx = S * 0.2, vy = S * 0.94, vw = S * 0.38, vh = S * 0.42;
+        b.fillStyle = 'rgba(9, 3, 2, .98)';
+        b.beginPath();
+        b.moveTo(vx, vy);
+        b.lineTo(vx + vw * 0.42, vy - vh);
+        b.lineTo(vx + vw * 0.58, vy - vh);
+        b.lineTo(vx + vw, vy);
+        b.fill();
+        /* rio de lava escorrendo da cratera até a piscina */
+        const rio = [
+            [vx + vw * 0.5, vy - vh],
+            [vx + vw * 0.62, vy - vh * 0.55],
+            [vx + vw * 0.56, vy - vh * 0.2],
+            [vx + vw * 0.7, vy + S * 0.02],
+            [vx + vw * 0.9, S * 0.99]
+        ];
+        c.rio = rio;
+        const rioG = b.createLinearGradient(0, vy - vh, 0, S);
+        rioG.addColorStop(0, '#ffe27a');
+        rioG.addColorStop(0.4, '#ff9a3c');
+        rioG.addColorStop(1, '#e0400f');
+        b.lineCap = 'round';
+        b.lineJoin = 'round';
+        b.strokeStyle = rioG;
+        b.lineWidth = Math.max(3, cell * 0.5);
+        b.beginPath();
+        b.moveTo(rio[0][0], rio[0][1]);
+        b.quadraticCurveTo(rio[1][0], rio[1][1], rio[2][0], rio[2][1]);
+        b.quadraticCurveTo(rio[3][0], rio[3][1], rio[4][0], rio[4][1]);
+        b.stroke();
+        /* halo quente em volta do rio */
+        b.strokeStyle = 'rgba(255, 120, 30, .18)';
+        b.lineWidth = Math.max(8, cell * 1.4);
+        b.stroke();
+        /* piscina de lava no rodapé */
+        const pisc = b.createLinearGradient(0, S * 0.93, 0, S);
+        pisc.addColorStop(0, 'rgba(255, 130, 30, .85)');
+        pisc.addColorStop(0.35, 'rgba(210, 60, 10, .55)');
+        pisc.addColorStop(1, 'rgba(110, 20, 5, 0)');
+        b.fillStyle = pisc;
+        b.fillRect(0, S * 0.93, S, S * 0.07);
+        /* rachaduras no chão (coords guardadas p/ brilho pulsar) */
+        c.rachaduras = [];
+        for (let r2 = 0; r2 < 6; r2++) {
+            const rx2 = S * (0.08 + r2 * 0.15 + rndC(r2) * 0.05);
+            const ry2 = S * (0.5 + rndC(r2 + 5) * 0.38);
+            const pts = [[rx2, ry2], [rx2 + S * 0.045, ry2 + S * 0.02], [rx2 + S * 0.09, ry2 - S * 0.015]];
+            c.rachaduras.push(pts);
+            b.strokeStyle = 'rgba(30, 8, 4, .95)';
+            b.lineWidth = Math.max(1.5, cell * 0.1);
+            b.beginPath();
+            b.moveTo(pts[0][0], pts[0][1]);
+            b.lineTo(pts[1][0], pts[1][1]);
+            b.lineTo(pts[2][0], pts[2][1]);
+            b.stroke();
+        }
+        /* halo da cratera (gradiente dinâmico, no ctx principal) */
+        c.haloCratera = ctx.createRadialGradient(vx + vw * 0.5, vy - vh, 0, vx + vw * 0.5, vy - vh, vw * 0.8);
+        c.haloCratera.addColorStop(0, 'rgba(255, 150, 45, .4)');
+        c.haloCratera.addColorStop(1, 'rgba(255, 150, 45, 0)');
+        c.crateraXY = [area.x + vx + vw * 0.5, area.y + vy - vh];
+        c.nuvensFumaca = [0, 1, 2, 3].map(f => ({ fase: f / 4 }));
+    } else if (tema === 'Tempestade') {
+        /* céu carregado */
+        const ceu = b.createLinearGradient(0, 0, 0, S);
+        ceu.addColorStop(0, 'rgba(8, 10, 18, 1)');
+        ceu.addColorStop(0.5, 'rgba(15, 19, 31, 1)');
+        ceu.addColorStop(1, 'rgba(19, 25, 40, 1)');
+        b.fillStyle = ceu;
+        b.fillRect(0, 0, S, S);
+        /* massas de nuvem escuras */
+        [[0.14, 0.08, 0.3], [0.45, 0.05, 0.36], [0.72, 0.1, 0.32], [0.92, 0.06, 0.26], [0.3, 0.16, 0.24]].forEach(nb => {
+            const nx = S * nb[0], ny = S * nb[1], nr = S * nb[2];
+            const ng = b.createRadialGradient(nx, ny, 0, nx, ny, nr);
+            ng.addColorStop(0, 'rgba(56, 68, 98, .55)');
+            ng.addColorStop(0.6, 'rgba(44, 54, 80, .3)');
+            ng.addColorStop(1, 'rgba(44, 54, 80, 0)');
+            b.fillStyle = ng;
+            b.fillRect(nx - nr, ny - nr, nr * 2, nr * 2);
+        });
+        /* colinas distantes */
+        b.fillStyle = 'rgba(7, 9, 16, .95)';
+        b.beginPath();
+        b.moveTo(0, S * 0.9);
+        b.quadraticCurveTo(S * 0.25, S * 0.82, S * 0.5, S * 0.89);
+        b.quadraticCurveTo(S * 0.75, S * 0.95, S, S * 0.87);
+        b.lineTo(S, S);
+        b.lineTo(0, S);
+        b.fill();
+        /* capim seco no rodapé (base estática) */
+        b.strokeStyle = 'rgba(4, 6, 11, .95)';
+        b.lineWidth = Math.max(1, cell * 0.07);
+        for (let gr = 0; gr < 42; gr++) {
+            const gx = S * rndC(gr + 1), gh = cell * (0.5 + rndC(gr + 20) * 0.9);
+            const incl = (rndC(gr + 40) - 0.5) * cell * 0.4;
+            b.beginPath();
+            b.moveTo(gx, S * 0.985);
+            b.lineTo(gx + incl, S * 0.985 - gh);
+            b.stroke();
+        }
+        /* poças refletindo o céu */
+        [[0.2, 0.955], [0.55, 0.97], [0.85, 0.96]].forEach(pp => {
+            b.fillStyle = 'rgba(70, 92, 135, .22)';
+            b.beginPath();
+            b.ellipse(S * pp[0], S * pp[1], S * 0.045, S * 0.008, 0, 0, Math.PI * 2);
+            b.fill();
+        });
+        /* nuvens que deslizam (gradientes no ctx principal) */
+        c.nuvens = [[0.25, 0.1, 0.3], [0.68, 0.07, 0.34]].map((nb, i) => {
+            const nx = area.x + S * nb[0];
+            const rg = ctx.createRadialGradient(nx, area.y + S * nb[1], 0, nx, area.y + S * nb[1], S * nb[2]);
+            rg.addColorStop(0, `rgba(70, 84, 118, ${0.4 - i * 0.08})`);
+            rg.addColorStop(1, 'rgba(70, 84, 118, 0)');
+            return { grad: rg, x: nx, y: area.y + S * nb[1], r: S * nb[2], vel: 0.008 + i * 0.004 };
+        });
+        /* névoa rasteira (gradiente no ctx principal) */
+        c.nevoa = ctx.createLinearGradient(0, area.y + S * 0.72, 0, area.y + S);
+        c.nevoa.addColorStop(0, 'rgba(105, 130, 180, 0)');
+        c.nevoa.addColorStop(1, 'rgba(105, 130, 180, .18)');
+        /* capim que balança (8 hastes vivas) */
+        c.gramaViva = [0, 1, 2, 3, 4, 5, 6, 7].map(gv => ({
+            x: S * (0.05 + gv * 0.13 + rndC(gv) * 0.06),
+            h: cell * (0.9 + rndC(gv + 9) * 0.7),
+            fase: gv * 1.4
+        }));
+    } else if (tema === 'Retro') {
+        /* céu synthwave: roxo → horizonte quente */
+        const ceu = b.createLinearGradient(0, 0, 0, S * 0.62);
+        ceu.addColorStop(0, 'rgba(14, 4, 36, 1)');
+        ceu.addColorStop(0.55, 'rgba(38, 8, 62, 1)');
+        ceu.addColorStop(1, 'rgba(80, 18, 78, 1)');
+        b.fillStyle = ceu;
+        b.fillRect(0, 0, S, S * 0.62);
+        /* chão abaixo do horizonte */
+        b.fillStyle = 'rgba(16, 4, 32, 1)';
+        b.fillRect(0, S * 0.62, S, S * 0.38);
+        /* reflexo do sol na pista */
+        const ref = b.createLinearGradient(0, S * 0.62, 0, S);
+        ref.addColorStop(0, 'rgba(255, 90, 140, .14)');
+        ref.addColorStop(1, 'rgba(255, 90, 140, 0)');
+        b.fillStyle = ref;
+        b.fillRect(S * 0.4, S * 0.62, S * 0.2, S * 0.38);
+        /* estrelas fixas */
+        for (let st = 0; st < 34; st++) {
+            b.fillStyle = `rgba(255, 225, 250, ${0.2 + rndC(st) * 0.5})`;
+            b.fillRect(S * rndC(st + 1), S * rndC(st + 31) * 0.5, Math.max(1, cell * 0.07), Math.max(1, cell * 0.07));
+        }
+        /* sol listrado */
+        const solX = S * 0.5, solY = S * 0.34, solR = S * 0.16;
+        const sol = b.createLinearGradient(0, solY - solR, 0, solY + solR);
+        sol.addColorStop(0, '#ffe86b');
+        sol.addColorStop(0.5, '#ff8a5c');
+        sol.addColorStop(1, '#ff3d8b');
+        b.save();
+        b.beginPath();
+        b.arc(solX, solY, solR, 0, Math.PI * 2);
+        b.clip();
+        b.fillStyle = sol;
+        b.fillRect(solX - solR, solY - solR, solR * 2, solR * 2);
+        b.fillStyle = 'rgba(40, 8, 60, .95)';
+        for (let l = 0; l < 5; l++) {
+            b.fillRect(solX - solR, solY + solR * (0.12 + l * 0.2), solR * 2, solR * (0.045 + l * 0.032));
+        }
+        b.restore();
+        /* halo do sol */
+        const halo = b.createRadialGradient(solX, solY, solR * 0.8, solX, solY, solR * 2);
+        halo.addColorStop(0, 'rgba(255, 110, 150, .22)');
+        halo.addColorStop(1, 'rgba(255, 110, 150, 0)');
+        b.fillStyle = halo;
+        b.fillRect(solX - solR * 2, solY - solR * 2, solR * 4, solR * 4);
+        c.solXY = [area.x + solX, area.y + solY];
+        c.solR = solR;
+        /* montanhas em 3 camadas */
+        [['rgba(52, 12, 82, .95)', 0.2, 0.52, 0.34], ['rgba(34, 8, 58, .97)', 0.55, 0.74, 0.28], ['rgba(22, 5, 42, 1)', 0.82, 0.95, 0.24]].forEach(m => {
+            b.fillStyle = m[0];
+            b.beginPath();
+            b.moveTo(S * (m[1] - 0.18), S * 0.63);
+            b.lineTo(S * m[1], S * 0.63 - S * m[3] * 0.5);
+            b.lineTo(S * (m[1] + 0.18), S * 0.63);
+            b.fill();
+        });
+        /* palmeiras silhueta nas margens */
+        [[0.06, 1], [0.93, 0.85]].forEach(pp => {
+            const px2 = S * pp[0], escala = pp[1];
+            const topo = S * 0.62 - S * 0.24 * escala;
+            b.strokeStyle = 'rgba(10, 2, 24, 1)';
+            b.lineCap = 'round';
+            b.lineWidth = Math.max(3, cell * 0.3);
+            b.beginPath();
+            b.moveTo(px2, S * 0.66);
+            b.quadraticCurveTo(px2 + S * 0.02 * escala, S * 0.5, px2 + S * 0.05 * escala, topo);
+            b.stroke();
+            b.lineWidth = Math.max(2, cell * 0.16);
+            for (let fr = 0; fr < 6; fr++) {
+                const ang = Math.PI * (0.15 + fr * 0.14);
+                b.beginPath();
+                b.moveTo(px2 + S * 0.05 * escala, topo);
+                b.quadraticCurveTo(
+                    px2 + S * 0.05 * escala + Math.cos(ang) * S * 0.09 * escala,
+                    topo + Math.sin(ang) * S * 0.06 * escala,
+                    px2 + S * 0.05 * escala + Math.cos(ang) * S * 0.13 * escala,
+                    topo + Math.sin(ang) * S * 0.1 * escala + S * 0.02
+                );
+                b.stroke();
+            }
+        });
+        /* scanlines de CRT */
+        b.fillStyle = 'rgba(0, 0, 0, .05)';
+        for (let sl = 0; sl < S; sl += 4) b.fillRect(0, sl, S, 1);
+        /* pulso do sol (overlay dinâmico) */
+        c.solPulso = ctx.createRadialGradient(c.solXY[0], c.solXY[1], solR, c.solXY[0], c.solXY[1], solR * 1.6);
+        c.solPulso.addColorStop(0, 'rgba(255, 120, 160, .18)');
+        c.solPulso.addColorStop(1, 'rgba(255, 120, 160, 0)');
+    } else if (tema === 'Sakura') {
+        /* entardecer de ameixa */
+        const ceu = b.createLinearGradient(0, 0, 0, S);
+        ceu.addColorStop(0, 'rgba(26, 9, 32, 1)');
+        ceu.addColorStop(0.55, 'rgba(60, 21, 64, 1)');
+        ceu.addColorStop(1, 'rgba(38, 13, 42, 1)');
+        b.fillStyle = ceu;
+        b.fillRect(0, 0, S, S);
+        /* estrelas fracas no topo */
+        for (let st = 0; st < 14; st++) {
+            b.fillStyle = `rgba(255, 235, 250, ${0.15 + rndC(st) * 0.3})`;
+            b.fillRect(S * rndC(st + 1), S * rndC(st + 21) * 0.3, Math.max(1, cell * 0.06), Math.max(1, cell * 0.06));
+        }
+        /* monte Fuji ao fundo */
+        b.fillStyle = 'rgba(32, 12, 36, .96)';
+        b.beginPath();
+        b.moveTo(S * 0.12, S * 0.88);
+        b.lineTo(S * 0.32, S * 0.5);
+        b.lineTo(S * 0.52, S * 0.88);
+        b.fill();
+        /* neve no pico (com serrilhado) */
+        b.fillStyle = 'rgba(246, 228, 242, .9)';
+        b.beginPath();
+        b.moveTo(S * 0.32, S * 0.5);
+        b.lineTo(S * 0.275, S * 0.585);
+        b.lineTo(S * 0.29, S * 0.57);
+        b.lineTo(S * 0.305, S * 0.59);
+        b.lineTo(S * 0.32, S * 0.575);
+        b.lineTo(S * 0.335, S * 0.595);
+        b.lineTo(S * 0.35, S * 0.568);
+        b.lineTo(S * 0.365, S * 0.585);
+        b.fill();
+        /* névoa na base do Fuji */
+        const nevoaF = b.createLinearGradient(0, S * 0.78, 0, S * 0.9);
+        nevoaF.addColorStop(0, 'rgba(255, 160, 195, 0)');
+        nevoaF.addColorStop(0.5, 'rgba(255, 160, 195, .16)');
+        nevoaF.addColorStop(1, 'rgba(255, 160, 195, 0)');
+        b.fillStyle = nevoaF;
+        b.fillRect(0, S * 0.78, S, S * 0.12);
+        /* portal torii à direita */
+        b.fillStyle = 'rgba(72, 15, 28, .96)';
+        b.fillRect(S * 0.605, S * 0.76, S * 0.02, S * 0.2);
+        b.fillRect(S * 0.795, S * 0.76, S * 0.02, S * 0.2);
+        /* viga do topo com pontas erguidas */
+        b.beginPath();
+        b.moveTo(S * 0.575, S * 0.765);
+        b.quadraticCurveTo(S * 0.705, S * 0.735, S * 0.835, S * 0.765);
+        b.lineTo(S * 0.83, S * 0.782);
+        b.quadraticCurveTo(S * 0.705, S * 0.754, S * 0.58, S * 0.782);
+        b.fill();
+        /* viga do meio */
+        b.fillRect(S * 0.59, S * 0.815, S * 0.245, S * 0.012);
+        /* chão */
+        b.fillStyle = 'rgba(22, 7, 20, .98)';
+        b.fillRect(0, S * 0.955, S, S * 0.045);
+        /* pétalas caídas no chão */
+        for (let pc = 0; pc < 14; pc++) {
+            b.fillStyle = `rgba(255, ${170 + Math.floor(rndC(pc) * 40)}, 205, .3)`;
+            b.beginPath();
+            b.ellipse(S * rndC(pc + 60), S * (0.962 + rndC(pc + 80) * 0.03), cell * 0.16, cell * 0.06, rndC(pc) * 3, 0, Math.PI * 2);
+            b.fill();
+        }
+        /* brilho das lanternas (gradiente no ctx principal) */
+        c.lanterna = ctx.createRadialGradient(0, 0, 0, 0, 0, cell * 2);
+        c.lanterna.addColorStop(0, 'rgba(255, 190, 110, .4)');
+        c.lanterna.addColorStop(1, 'rgba(255, 190, 110, 0)');
+        /* vaga-lumes (gradiente no ctx principal) */
+        c.vagalume = ctx.createRadialGradient(0, 0, 0, 0, 0, cell * 1.4);
+        c.vagalume.addColorStop(0, 'rgba(255, 235, 150, .55)');
+        c.vagalume.addColorStop(1, 'rgba(255, 235, 150, 0)');
+        /* galho de cerejeira no topo */
+        c.galho = {
+            x0: area.x + S * 0.02, y0: area.y + S * 0.07,
+            cx: area.x + S * 0.2, cy: area.y + S * 0.015,
+            x1: area.x + S * 0.42, y1: area.y + S * 0.15
+        };
+        c.flores = [0, 1, 2, 3, 4, 5].map(i => ({
+            x: area.x + S * (0.07 + i * 0.062),
+            y: area.y + S * (0.06 + rndC(i + 3) * 0.09),
+            r: cell * (0.15 + rndC(i) * 0.08)
+        }));
+    }
+    return c;
+}
+function cacheCenario(tema, area, cell) {
+    const chave = [tema, Math.round(area.x), Math.round(area.y), Math.round(area.size), Math.round(cell)].join('|');
+    const existente = cenarioCache[tema];
+    if (existente && existente.chave === chave) return existente;
+    const c = novoBaseCenario(tema, area, cell);
+    if (tema === 'Abismo') {
+        c.aguaViva = ctx.createRadialGradient(0, 0, 0, 0, 0, cell * 1.1);
+        c.aguaViva.addColorStop(0, 'rgba(180, 240, 255, .5)');
+        c.aguaViva.addColorStop(0.7, 'rgba(120, 180, 255, .22)');
+        c.aguaViva.addColorStop(1, 'rgba(120, 180, 255, 0)');
+        c.feixeVivo = (() => {
+            const fx = area.x + area.size * 0.3;
+            const rg = ctx.createLinearGradient(fx, area.y, fx + area.size * 0.1, area.y + area.size * 0.75);
+            rg.addColorStop(0, 'rgba(140, 225, 255, .14)');
+            rg.addColorStop(1, 'rgba(140, 225, 255, 0)');
+            return { grad: rg, x: fx, w: area.size * 0.11 };
+        })();
+    } else if (tema === 'Sakura') {
+        c.lanterna = ctx.createRadialGradient(0, 0, 0, 0, 0, cell * 2);
+        c.lanterna.addColorStop(0, 'rgba(255, 190, 110, .4)');
+        c.lanterna.addColorStop(1, 'rgba(255, 190, 110, 0)');
+        c.vagalume = ctx.createRadialGradient(0, 0, 0, 0, 0, cell * 1.4);
+        c.vagalume.addColorStop(0, 'rgba(255, 235, 150, .55)');
+        c.vagalume.addColorStop(1, 'rgba(255, 235, 150, 0)');
+        c.galho = {
+            x0: area.x + area.size * 0.02, y0: area.y + area.size * 0.07,
+            cx: area.x + area.size * 0.2, cy: area.y + area.size * 0.015,
+            x1: area.x + area.size * 0.42, y1: area.y + area.size * 0.15
+        };
+        c.flores = [0, 1, 2, 3, 4, 5].map(i => ({
+            x: area.x + area.size * (0.07 + i * 0.062),
+            y: area.y + area.size * (0.06 + rndC(i + 3) * 0.09),
+            r: cell * (0.15 + rndC(i) * 0.08)
+        }));
+    }
+    cenarioCache[tema] = c;
+    return c;
+}
+function desenharAbismo(area, cell, agora) {
+    const c = cacheCenario('Abismo', area, cell);
+    ctx.drawImage(c.base, area.x, area.y);
+    /* feixe de luz vivo deslizando */
+    const deslF = Math.sin(agora / 4200) * area.size * 0.06;
+    ctx.fillStyle = c.feixeVivo.grad;
+    ctx.fillRect(c.feixeVivo.x + deslF, area.y, c.feixeVivo.w, area.size * 0.75);
+    /* bolhas subindo */
+    for (let bo = 0; bo < 20; bo++) {
+        const vel = 0.028 + rndC(bo + 60) * 0.03;
+        const prog = ((agora / 1000 * vel + rndC(bo)) % 1);
+        const bx = area.x + area.size * rndC(bo + 10) + Math.sin(agora / 900 + bo) * cell * 0.6;
+        const by = area.y + area.size * (1 - prog);
+        const raio = Math.max(1, cell * (0.05 + rndC(bo + 20) * 0.08));
+        ctx.strokeStyle = `rgba(190, 235, 255, ${0.25 + prog * 0.35})`;
+        ctx.lineWidth = Math.max(1, cell * 0.03);
+        ctx.beginPath();
+        ctx.arc(bx, by, raio, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+    /* cardumes: dois grupos de peixes */
+    for (let grupo = 0; grupo < 2; grupo++) {
+        for (let p = 0; p < 4; p++) {
+            const cicloP = ((agora / (13000 + grupo * 6000) + p * 0.06 + grupo * 0.4) % 1);
+            const px2 = area.x + cicloP * area.size * 1.25 - area.size * 0.12;
+            const py2 = area.y + area.size * (0.18 + grupo * 0.2 + p * 0.035) + Math.sin(agora / 1200 + p * 3 + grupo) * cell * 0.7;
+            const virado = Math.cos(agora / (13000 + grupo * 6000) * Math.PI * 2) > 0 ? 1 : -1;
+            ctx.fillStyle = `rgba(40, 110, 150, ${0.8 - p * 0.1})`;
+            ctx.beginPath();
+            ctx.ellipse(px2, py2, cell * 0.4, cell * 0.16, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(px2 - virado * cell * 0.4, py2);
+            ctx.lineTo(px2 - virado * cell * 0.68, py2 - cell * 0.14);
+            ctx.lineTo(px2 - virado * cell * 0.68, py2 + cell * 0.14);
+            ctx.fill();
+        }
+    }
+    /* águas-vivas pulsando */
+    for (let j = 0; j < 4; j++) {
+        const jx = area.x + area.size * (0.2 + (j % 2) * 0.42 + Math.floor(j / 2) * 0.14) + Math.sin(agora / 2100 + j * 2) * cell * 1.2;
+        const jy = area.y + area.size * (0.25 + j * 0.13) + Math.sin(agora / 1700 + j) * cell * 0.7;
+        const puls = 1 + Math.sin(agora / 800 + j) * 0.12;
+        ctx.save();
+        ctx.translate(jx, jy);
+        ctx.fillStyle = c.aguaViva;
+        ctx.beginPath();
+        ctx.arc(0, 0, cell * 1.1 * puls, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(190, 240, 255, .35)';
+        ctx.lineWidth = Math.max(1, cell * 0.03);
+        for (let tz = 0; tz < 3; tz++) {
+            ctx.beginPath();
+            ctx.moveTo((tz - 1) * cell * 0.3, cell * 0.3 * puls);
+            ctx.quadraticCurveTo((tz - 1) * cell * 0.5 + Math.sin(agora / 600 + tz) * cell * 0.2, cell * 0.9, (tz - 1) * cell * 0.35, cell * 1.3);
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+    /* baleia gigante atravessando o fundo */
+    const cicloB = (agora / 60000) % 1;
+    const bx2 = area.x + cicloB * area.size * 1.4 - area.size * 0.2;
+    const by2 = area.y + area.size * 0.42 + Math.sin(agora / 5000) * cell * 1.2;
+    const rabo = Math.sin(agora / 900) * cell * 0.35;
+    ctx.fillStyle = 'rgba(10, 26, 42, .88)';
+    ctx.beginPath();
+    ctx.ellipse(bx2, by2, cell * 2.6, cell * 0.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    /* rabo */
+    ctx.beginPath();
+    ctx.moveTo(bx2 - cell * 2.4, by2);
+    ctx.quadraticCurveTo(bx2 - cell * 3.1, by2 - cell * 0.5 + rabo, bx2 - cell * 3.3, by2 - cell * 0.7 + rabo);
+    ctx.quadraticCurveTo(bx2 - cell * 2.9, by2 + rabo * 0.5, bx2 - cell * 2.4, by2);
+    ctx.fill();
+    /* barbatana */
+    ctx.beginPath();
+    ctx.moveTo(bx2 + cell * 0.3, by2 + cell * 0.4);
+    ctx.quadraticCurveTo(bx2 + cell * 0.1, by2 + cell * 1.1, bx2 - cell * 0.4, by2 + cell * 0.9);
+    ctx.fill();
+    /* barriga mais clara */
+    ctx.fillStyle = 'rgba(60, 100, 130, .35)';
+    ctx.beginPath();
+    ctx.ellipse(bx2 + cell * 0.2, by2 + cell * 0.35, cell * 2.1, cell * 0.4, 0, 0, Math.PI);
+    ctx.fill();
+    /* olho */
+    ctx.fillStyle = 'rgba(200, 235, 255, .8)';
+    ctx.beginPath();
+    ctx.arc(bx2 + cell * 2.1, by2 - cell * 0.2, Math.max(1, cell * 0.06), 0, Math.PI * 2);
+    ctx.fill();
+    /* jato d'água de vez em quando */
+    const cicloJ = (agora % 9000) / 9000;
+    if (cicloJ < 0.08 && cicloB > 0.1 && cicloB < 0.9) {
+        ctx.strokeStyle = `rgba(200, 240, 255, ${(0.08 - cicloJ) * 6})`;
+        ctx.lineWidth = Math.max(1, cell * 0.08);
+        ctx.beginPath();
+        ctx.moveTo(bx2 + cell * 1.6, by2 - cell * 0.7);
+        ctx.quadraticCurveTo(bx2 + cell * 1.8, by2 - cell * 1.5, bx2 + cell * 2.1, by2 - cell * 1.7);
+        ctx.stroke();
+    }
+    /* algas balançando no rodapé */
+    [[0.07, 0], [0.15, 1.7], [0.87, 3.4], [0.95, 5.1]].forEach(al => {
+        const ax = area.x + area.size * al[0], altura = area.size * (0.13 + rndC(al[1]) * 0.09);
+        ctx.strokeStyle = 'rgba(18, 105, 85, .6)';
+        ctx.lineWidth = Math.max(1.5, cell * 0.1);
+        ctx.beginPath();
+        ctx.moveTo(ax, area.y + area.size);
+        for (let seg = 1; seg <= 4; seg++) {
+            const yy = area.y + area.size - altura * seg / 4;
+            const onda = Math.sin(agora / 1400 + al[1] + seg) * cell * 0.38 * seg / 4;
+            ctx.lineTo(ax + onda, yy);
+        }
+        ctx.stroke();
+    });
+}
+function desenharVulcao(area, cell, agora) {
+    const c = cacheCenario('Vulcao', area, cell);
+    ctx.drawImage(c.base, area.x, area.y);
+    /* halo pulsante da cratera */
+    ctx.globalAlpha = 0.7 + Math.sin(agora / 700) * 0.3;
+    ctx.fillStyle = c.haloCratera;
+    ctx.fillRect(c.crateraXY[0] - area.size * 0.15, c.crateraXY[1] - area.size * 0.15, area.size * 0.3, area.size * 0.3);
+    ctx.globalAlpha = 1;
+    /* brilho do rio de lava pulsando */
+    const rio = c.rio;
+    ctx.globalAlpha = 0.25 + Math.sin(agora / 800) * 0.15;
+    ctx.strokeStyle = 'rgba(255, 170, 60, .5)';
+    ctx.lineWidth = Math.max(6, cell * 0.9);
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(rio[0][0], rio[0][1]);
+    ctx.quadraticCurveTo(rio[1][0], rio[1][1], rio[2][0], rio[2][1]);
+    ctx.quadraticCurveTo(rio[3][0], rio[3][1], rio[4][0], rio[4][1]);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    /* rachaduras acendendo e apagando */
+    c.rachaduras.forEach((pts, r2) => {
+        const brilho = 0.3 + Math.sin(agora / 900 + r2 * 2.1) * 0.3;
+        if (brilho < 0.12) return;
+        ctx.strokeStyle = `rgba(255, 110, 30, ${brilho})`;
+        ctx.lineWidth = Math.max(1, cell * 0.07);
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        ctx.lineTo(pts[1][0], pts[1][1]);
+        ctx.lineTo(pts[2][0], pts[2][1]);
+        ctx.stroke();
+    });
+    /* coluna de fumaça subindo */
+    c.nuvensFumaca.forEach((nf, f) => {
+        const progF = ((agora / 11000 + nf.fase) % 1);
+        const fx = area.x + area.size * 0.296 + Math.sin(agora / 2200 + f * 2) * cell * (0.8 + progF * 2.2);
+        const fy = area.y + area.size * 0.52 - progF * area.size * 0.42;
+        ctx.fillStyle = `rgba(110, 100, 108, ${0.2 * (1 - progF)})`;
+        ctx.beginPath();
+        ctx.arc(fx, fy, cell * (0.7 + progF * 2.1), 0, Math.PI * 2);
+        ctx.fill();
+    });
+    /* brasas subindo pelo mapa */
+    for (let e = 0; e < 24; e++) {
+        const vel = 0.03 + rndC(e + 90) * 0.045;
+        const prog = ((agora / 1000 * vel + rndC(e)) % 1);
+        const ex = area.x + area.size * rndC(e + 30) + Math.sin(agora / 700 + e * 2) * cell * 0.9;
+        const ey = area.y + area.size * (1 - prog);
+        const piscaE = 0.55 + Math.sin(agora / 200 + e * 3) * 0.35;
+        ctx.fillStyle = `rgba(255, ${120 + Math.floor(rndC(e) * 90)}, 40, ${piscaE * (1 - prog * 0.55)})`;
+        ctx.fillRect(ex, ey, Math.max(1.2, cell * 0.08), Math.max(1.2, cell * 0.08));
+    }
+    /* morcegos passando longe */
+    for (let m2 = 0; m2 < 2; m2++) {
+        const cicloM = ((agora / 17000 + m2 * 0.5) % 1);
+        const mx = area.x + cicloM * area.size * 1.2 - area.size * 0.1;
+        const my = area.y + area.size * (0.14 + m2 * 0.06) + Math.sin(agora / 800 + m2) * cell * 0.3;
+        const bate = Math.sin(agora / 120 + m2 * 2) * cell * 0.14;
+        ctx.strokeStyle = 'rgba(8, 3, 2, .9)';
+        ctx.lineWidth = Math.max(1, cell * 0.07);
+        ctx.beginPath();
+        ctx.moveTo(mx - cell * 0.2, my - bate);
+        ctx.lineTo(mx, my);
+        ctx.lineTo(mx + cell * 0.2, my - bate);
+        ctx.stroke();
+    }
+}
+function desenharTempestade(area, cell, agora) {
+    const c = cacheCenario('Tempestade', area, cell);
+    ctx.drawImage(c.base, area.x, area.y);
+    /* nuvens deslizando */
+    c.nuvens.forEach(nb => {
+        const desl = (agora * nb.vel) % (area.size * 1.6);
+        ctx.fillStyle = nb.grad;
+        ctx.fillRect(nb.x - nb.r + desl - area.size * 0.3, nb.y - nb.r, nb.r * 2, nb.r * 2);
+    });
+    /* névoa rasteira ondulando */
+    const ondaN = Math.sin(agora / 2600) * area.size * 0.015;
+    ctx.fillStyle = c.nevoa;
+    ctx.fillRect(area.x, area.y + area.size * 0.72 + ondaN, area.size, area.size * 0.28);
+    /* chuva forte com vento */
+    const tChuva = agora / 1000;
+    const vento = cell * 0.18;
+    for (let g2 = 0; g2 < 60; g2++) {
+        const vel = 0.9 + rndC(g2 + 80) * 0.5;
+        const prog = ((tChuva * vel + rndC(g2)) % 1);
+        const gx = area.x + area.size * rndC(g2 + 40) + prog * vento * 6;
+        const gy = area.y + area.size * prog;
+        const comp = cell * (0.7 + vel * 0.35);
+        ctx.strokeStyle = `rgba(165, 200, 255, ${0.3 + rndC(g2) * 0.24})`;
+        ctx.lineWidth = Math.max(1, cell * 0.05);
+        ctx.beginPath();
+        ctx.moveTo(gx - vento, gy - comp);
+        ctx.lineTo(gx, gy);
+        ctx.stroke();
+    }
+    /* relâmpago duplo ramificado a cada ~4.5s */
+    const cicloR = agora % 4500;
+    if (cicloR < 420) {
+        const forca = 1 - cicloR / 420;
+        const seedR = Math.floor(agora / 4500);
+        const rx2 = area.x + area.size * (0.15 + rndC(seedR + 5) * 0.7);
+        let ry2 = area.y + area.size * 0.02;
+        const tronco = [[rx2, ry2]];
+        ctx.beginPath();
+        ctx.moveTo(rx2, ry2);
+        for (let zig = 0; zig < 6; zig++) {
+            rx2 += (rndC(seedR * 7 + zig) - 0.5) * cell * 2.4;
+            ry2 += area.size * 0.08;
+            tronco.push([rx2, ry2]);
+            ctx.lineTo(rx2, ry2);
+        }
+        /* brilho largo em volta do raio */
+        ctx.strokeStyle = `rgba(200, 215, 255, ${0.25 + forca * 0.2})`;
+        ctx.lineWidth = Math.max(5, cell * 0.28);
+        ctx.stroke();
+        /* tronco principal */
+        ctx.strokeStyle = `rgba(240, 246, 255, ${0.7 + forca * 0.3})`;
+        ctx.lineWidth = Math.max(2, cell * 0.1);
+        ctx.stroke();
+        /* ramo secundário */
+        if (tronco.length > 3) {
+            const [bx3, by3] = tronco[2];
+            const lado = rndC(seedR + 3) > 0.5 ? 1 : -1;
+            ctx.strokeStyle = `rgba(205, 218, 255, ${0.45 + forca * 0.3})`;
+            ctx.lineWidth = Math.max(1, cell * 0.06);
+            ctx.beginPath();
+            ctx.moveTo(bx3, by3);
+            ctx.lineTo(bx3 + cell * 1.6 * lado, by3 + area.size * 0.05);
+            ctx.lineTo(bx3 + cell * 2.6 * lado, by3 + area.size * 0.1);
+            ctx.stroke();
+        }
+        /* clarão duplo piscando */
+        const pisca = cicloR < 200 ? forca : (cicloR < 300 ? 0.2 : forca * 0.7);
+        ctx.fillStyle = `rgba(205, 222, 255, ${pisca * 0.24})`;
+        ctx.fillRect(area.x, area.y, area.size, area.size);
+    }
+    /* capim vivo balançando com o vento */
+    c.gramaViva.forEach(gv => {
+        const gx2 = area.x + gv.x;
+        const inclG = Math.sin(agora / 500 + gv.fase) * cell * 0.3;
+        ctx.strokeStyle = 'rgba(6, 9, 15, .95)';
+        ctx.lineWidth = Math.max(1, cell * 0.09);
+        ctx.beginPath();
+        ctx.moveTo(gx2, area.y + area.size * 0.985);
+        ctx.quadraticCurveTo(gx2 + inclG * 0.5, area.y + area.size * 0.985 - gv.h * 0.6, gx2 + inclG, area.y + area.size * 0.985 - gv.h);
+        ctx.stroke();
+    });
+    /* respingos nas poças */
+    for (let s2 = 0; s2 < 8; s2++) {
+        const cicloS = ((tChuva * (0.8 + rndC(s2)) + rndC(s2 + 9)) % 1);
+        if (cicloS > 0.96) {
+            const sx = area.x + area.size * rndC(s2 + 40);
+            const sy = area.y + area.size * 0.98;
+            const raioS = (cicloS - 0.96) / 0.04 * cell * 0.55;
+            ctx.strokeStyle = 'rgba(165, 200, 255, .4)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(sx, sy, raioS, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    }
+}
+function desenharRetro(area, cell, agora) {
+    const c = cacheCenario('Retro', area, cell);
+    ctx.drawImage(c.base, area.x, area.y);
+    /* estrelas piscando */
+    for (let st2 = 0; st2 < 14; st2++) {
+        const sx2 = area.x + rndC(st2 + 51) * area.size;
+        const sy2 = area.y + rndC(st2 + 61) * area.size * 0.45;
+        const tit = Math.sin(agora / (280 + (st2 % 4) * 110) + st2 * 2.1) * 0.5 + 0.5;
+        if (tit < 0.2) continue;
+        ctx.fillStyle = `rgba(255, 225, 250, ${tit * 0.8})`;
+        ctx.fillRect(sx2, sy2, Math.max(1, cell * 0.08), Math.max(1, cell * 0.08));
+    }
+    /* pulso do sol */
+    ctx.globalAlpha = 0.6 + Math.sin(agora / 1600) * 0.4;
+    ctx.fillStyle = c.solPulso;
+    ctx.fillRect(c.solXY[0] - c.solR * 1.7, c.solXY[1] - c.solR * 1.7, c.solR * 3.4, c.solR * 3.4);
+    ctx.globalAlpha = 1;
+    /* grade em perspectiva rolando, com brilho neon */
+    const hz = area.y + area.size * 0.62;
+    const baseY = area.y + area.size;
+    const deslG = (agora / 1400) % 1;
+    for (let passada = 0; passada < 2; passada++) {
+        const largo = passada === 0 ? Math.max(3, cell * 0.16) : Math.max(1, cell * 0.045);
+        ctx.lineWidth = largo;
+        for (let v = -6; v <= 6; v++) {
+            ctx.strokeStyle = passada === 0 ? 'rgba(255, 60, 190, .1)' : 'rgba(255, 60, 190, .38)';
+            ctx.beginPath();
+            ctx.moveTo(area.x + area.size * 0.5 + v * cell * 1.6, baseY);
+            ctx.lineTo(area.x + area.size * 0.5 + v * cell * 0.14, hz);
+            ctx.stroke();
+        }
+        for (let h2 = 0; h2 < 7; h2++) {
+            const prog2 = ((h2 / 7 + deslG) % 1);
+            const hy2 = hz + (baseY - hz) * prog2 * prog2;
+            ctx.strokeStyle = passada === 0 ? 'rgba(80, 220, 255, .08)' : `rgba(80, 220, 255, ${0.16 + prog2 * 0.28})`;
+            ctx.beginPath();
+            ctx.moveTo(area.x, hy2);
+            ctx.lineTo(area.x + area.size, hy2);
+            ctx.stroke();
+        }
+    }
+    /* estrela cadente de vez em quando */
+    const cicloCad = agora % 6000;
+    if (cicloCad < 700) {
+        const progC = cicloCad / 700;
+        const seedC = Math.floor(agora / 6000);
+        const cx3 = area.x + area.size * (0.15 + rndC(seedC) * 0.5) + progC * area.size * 0.22;
+        const cy3 = area.y + area.size * (0.06 + rndC(seedC + 2) * 0.12) + progC * area.size * 0.1;
+        ctx.strokeStyle = `rgba(255, 230, 250, ${(1 - progC) * 0.85})`;
+        ctx.lineWidth = Math.max(1, cell * 0.06);
+        ctx.beginPath();
+        ctx.moveTo(cx3, cy3);
+        ctx.lineTo(cx3 - area.size * 0.06, cy3 - area.size * 0.03);
+        ctx.stroke();
+    }
+}
+function desenharSakura(area, cell, agora) {
+    const c = cacheCenario('Sakura', area, cell);
+    ctx.drawImage(c.base, area.x, area.y);
+    /* pétalas caindo girando */
+    for (let p2 = 0; p2 < 22; p2++) {
+        const vel = 0.035 + rndC(p2 + 50) * 0.03;
+        const prog = ((agora / 1000 * vel + rndC(p2)) % 1);
+        const px3 = area.x + area.size * rndC(p2 + 10) + Math.sin(agora / 800 + p2 * 1.9) * cell * 1.4;
+        const py3 = area.y + area.size * prog;
+        const tamP = cell * (0.13 + rndC(p2 + 20) * 0.1);
+        const gira = agora / 600 + p2 * 1.3;
+        ctx.save();
+        ctx.translate(px3, py3);
+        ctx.rotate(gira);
+        ctx.fillStyle = `rgba(255, ${165 + Math.floor(rndC(p2) * 50)}, 205, ${0.55 + rndC(p2 + 30) * 0.3})`;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, tamP, tamP * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+    /* galho de cerejeira */
+    ctx.strokeStyle = 'rgba(30, 10, 22, .92)';
+    ctx.lineWidth = Math.max(2, cell * 0.18);
+    ctx.beginPath();
+    ctx.moveTo(c.galho.x0, c.galho.y0);
+    ctx.quadraticCurveTo(c.galho.cx, c.galho.cy, c.galho.x1, c.galho.y1);
+    ctx.stroke();
+    ctx.lineWidth = Math.max(1.5, cell * 0.1);
+    ctx.beginPath();
+    ctx.moveTo(c.galho.cx, c.galho.cy + cell * 0.1);
+    ctx.quadraticCurveTo(c.galho.cx + cell * 1.2, c.galho.cy + cell * 0.4, c.galho.cx + cell * 2.0, c.galho.cy + cell * 0.2);
+    ctx.stroke();
+    /* flores balançando */
+    c.flores.forEach((fl, i) => {
+        const balanca = Math.sin(agora / 1500 + i * 2) * cell * 0.05;
+        for (let pt = 0; pt < 5; pt++) {
+            const ang = pt / 5 * Math.PI * 2 + agora / 4000 + i;
+            ctx.fillStyle = `rgba(255, ${175 + (i % 3) * 20}, 210, .92)`;
+            ctx.beginPath();
+            ctx.ellipse(fl.x + Math.cos(ang) * fl.r * 0.7 + balanca, fl.y + Math.sin(ang) * fl.r * 0.7, fl.r * 0.55, fl.r * 0.38, ang, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.fillStyle = 'rgba(255, 220, 130, .95)';
+        ctx.beginPath();
+        ctx.arc(fl.x + balanca, fl.y, fl.r * 0.22, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    /* lanternas de papel subindo devagar */
+    for (let lan = 0; lan < 3; lan++) {
+        const cicloL = ((agora / 26000 + lan / 3) % 1);
+        const lx2 = area.x + area.size * (0.55 + lan * 0.12) + Math.sin(agora / 1800 + lan * 2.4) * cell * 1.2;
+        const ly2 = area.y + area.size * (0.95 - cicloL * 0.6);
+        const pulsoL = 0.75 + Math.sin(agora / 700 + lan) * 0.25;
+        ctx.save();
+        ctx.translate(lx2, ly2);
+        ctx.globalAlpha = pulsoL;
+        ctx.fillStyle = c.lanterna;
+        ctx.fillRect(-cell * 2, -cell * 2, cell * 4, cell * 4);
+        ctx.globalAlpha = 1;
+        /* corpo do papel */
+        ctx.fillStyle = 'rgba(255, 200, 130, .92)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, cell * 0.32, cell * 0.45, 0, 0, Math.PI * 2);
+        ctx.fill();
+        /* aros escuros */
+        ctx.strokeStyle = 'rgba(60, 20, 15, .85)';
+        ctx.lineWidth = Math.max(1, cell * 0.05);
+        ctx.beginPath();
+        ctx.moveTo(-cell * 0.3, -cell * 0.42);
+        ctx.lineTo(cell * 0.3, -cell * 0.42);
+        ctx.moveTo(-cell * 0.22, cell * 0.42);
+        ctx.lineTo(cell * 0.22, cell * 0.42);
+        ctx.stroke();
+        /* chama dentro */
+        ctx.fillStyle = `rgba(255, 240, 180, ${pulsoL})`;
+        ctx.beginPath();
+        ctx.arc(0, 0, cell * 0.1, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+    /* vaga-lumes piscando */
+    for (let v2 = 0; v2 < 8; v2++) {
+        const vx2 = area.x + area.size * rndC(v2 + 70) + Math.sin(agora / 1900 + v2 * 2.4) * cell * 2;
+        const vy2 = area.y + area.size * (0.35 + rndC(v2 + 80) * 0.5) + Math.cos(agora / 2300 + v2) * cell * 1.2;
+        const pisca = Math.max(0, Math.sin(agora / 900 + v2 * 1.7));
+        if (pisca < 0.15) continue;
+        ctx.save();
+        ctx.translate(vx2, vy2);
+        ctx.globalAlpha = pisca;
+        ctx.fillStyle = c.vagalume;
+        ctx.fillRect(-cell * 1.4, -cell * 1.4, cell * 2.8, cell * 2.8);
+        ctx.fillStyle = 'rgba(255, 245, 180, .95)';
+        ctx.beginPath();
+        ctx.arc(0, 0, Math.max(1, cell * 0.06), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+}
 function draw() {
     const r = cv.getBoundingClientRect();
     const t = T[theme];
@@ -2550,7 +3450,47 @@ function draw() {
     ctx.strokeRect(area.x + 1, area.y + 1, area.size - 2, area.size - 2);
     ctx.restore();
 
-    if (theme === 'Cosmos') desenharCosmos(area, cell);
+    /* Cenário animado: só desenha com mapa medido (na primeira
+       carga a tela do jogo está oculta e o mapa dá 0).
+       O try/catch garante que um erro no cenário NUNCA congele
+       a partida — o resto do frame continua desenhando. */
+    if (area.size > 0 && cell > 0) {
+        ctx.save();
+        ctx.globalAlpha = 0.85;
+        try {
+            if (theme === 'Cosmos') desenharCosmos(area, cell);
+            else if (theme === 'Abismo') desenharAbismo(area, cell, Date.now());
+            else if (theme === 'Vulcao') desenharVulcao(area, cell, Date.now());
+            else if (theme === 'Tempestade') desenharTempestade(area, cell, Date.now());
+            else if (theme === 'Retro') desenharRetro(area, cell, Date.now());
+            else if (theme === 'Sakura') desenharSakura(area, cell, Date.now());
+        } catch (_e) { console.warn('Erro no cenário:', _e); }
+        ctx.restore();
+        /* Devolve o tabuleiro por cima do cenário: o quadriculado
+           aparece atravessando (o cenário fica 85%) e as linhas
+           neon da grade + borda são redesenhadas em cima. */
+        ctx.save();
+        ctx.globalAlpha = 0.5;
+        ctx.shadowBlur = cell * 0.9;
+        ctx.shadowColor = col(t[3]);
+        ctx.strokeStyle = col(t[3]);
+        ctx.lineWidth = Math.max(2, cell * 0.08);
+        ctx.strokeRect(area.x + 1, area.y + 1, area.size - 2, area.size - 2);
+        ctx.restore();
+        ctx.save();
+        ctx.globalAlpha = 0.13;
+        ctx.strokeStyle = col(t[3]);
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let i2 = 1; i2 < mapSize; i2++) {
+            ctx.moveTo(area.x + i2 * cell, area.y);
+            ctx.lineTo(area.x + i2 * cell, area.y + area.size);
+            ctx.moveTo(area.x, area.y + i2 * cell);
+            ctx.lineTo(area.x + area.size, area.y + i2 * cell);
+        }
+        ctx.stroke();
+        ctx.restore();
+    }
 
     if (obstacles.size) {
         obstacles.forEach(key => {
@@ -2575,13 +3515,17 @@ function draw() {
     });
 
     if (rgbOn && rgb) {
-        ctx.save();
-        const hue = (performance.now() / 6) % 360;
-        ctx.fillStyle = `hsl(${hue}, 90%, 60%)`;
-        ctx.shadowBlur = cell * 0.6;
-        ctx.shadowColor = ctx.fillStyle;
-        ctx.fillRect(area.x + rgb.x * cell + cell * 0.10, area.y + rgb.y * cell + cell * 0.10, cell * 0.80, cell * 0.80);
-        ctx.restore();
+        /* Maçã colorida (RGB): mesma maçã caprichada das outras,
+           mas com arco-íris girando (matiz animada). */
+        desenharMaca(
+            ctx,
+            area.x + rgb.x * cell,
+            area.y + rgb.y * cell,
+            cell,
+            performance.now(),
+            false,
+            (performance.now() / 6) % 360
+        );
     }
 
     s.forEach((p, i) => {
