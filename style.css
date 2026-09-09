@@ -900,17 +900,40 @@ header > b{
     z-index: 4;
 }
 #notasAtualizacao h3{
-    margin: 0 0 14px;
-    font-size: 15px;
+    margin: 0 0 4px;
+    font-size: 16px;
     letter-spacing: 1px;
-    color: var(--border);
+    background: linear-gradient(90deg, #a78bfa, #60a5fa, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#notasAtualizacao .notasSub{
+    margin: 0 0 14px;
+    font-size: 11px;
+    opacity: .55;
+}
+/* barra de rolagem discreta dentro do painel */
+#notasAtualizacao::-webkit-scrollbar{ width: 8px; }
+#notasAtualizacao::-webkit-scrollbar-track{ background: transparent; }
+#notasAtualizacao::-webkit-scrollbar-thumb{
+    background: rgba(255, 255, 255, .14);
+    border-radius: 8px;
 }
 .notaItem{
-    margin-bottom: 14px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, .04);
+    position: relative;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
+    border: 1px solid rgba(255, 255, 255, .07);
     border-left: 3px solid var(--border);
+    transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.notaItem:hover{
+    transform: translateX(3px);
+    border-left-color: #a78bfa;
+    background: linear-gradient(160deg, rgba(167, 139, 250, .08), rgba(255, 255, 255, .02));
 }
 .notaItem b{
     display: block;
@@ -920,8 +943,34 @@ header > b{
 .notaItem p{
     margin: 0;
     font-size: 12px;
-    line-height: 1.5;
-    opacity: .82;
+    line-height: 1.55;
+    opacity: .85;
+}
+/* novidades do dia: destaque dourado + etiqueta de versão */
+.notaItem.novo{
+    border-left-color: #fbbf24;
+    background: linear-gradient(160deg, rgba(251, 191, 36, .09), rgba(255, 255, 255, .02));
+}
+.notaItem.novo:hover{
+    border-left-color: #f59e0b;
+    background: linear-gradient(160deg, rgba(251, 191, 36, .13), rgba(255, 255, 255, .02));
+}
+.notaTag{
+    float: right;
+    margin-left: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(167, 139, 250, .16);
+    border: 1px solid rgba(167, 139, 250, .4);
+    color: #c4b5fd;
+}
+.notaItem.novo .notaTag{
+    background: rgba(251, 191, 36, .16);
+    border-color: rgba(251, 191, 36, .5);
+    color: #fde68a;
 }
 /* Painel automático só em tela GRANDE (monitor). Em
    notebooks (telas menores) ele fica muito grande, então
