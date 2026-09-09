@@ -1,6 +1,6 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00c060,100:0a5c2e&height=200&section=header&text=%F0%9F%90%8D%20Cobrinha%20Infinita%20PRO&fontSize=40&fontColor=ffffff&animation=fadeIn&desc=Um%20jogo%20da%20cobrinha%20evolu%C3%ADdo%20%E2%80%94%20skins%2C%20temas%2C%20ranking%20global%20e%20mais&descSize=15&descAlignY=72" alt="Banner"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00c060,100:0a5c2e&height=200&section=header&text=%F0%9F%90%8D%20Python%20Snake&fontSize=40&fontColor=ffffff&animation=fadeIn&desc=Um%20jogo%20da%20cobrinha%20evolu%C3%ADdo%20%E2%80%94%20skins%2C%20temas%2C%20ranking%20global%20e%20mais&descSize=15&descAlignY=72" alt="Banner"/>
 
-# 🐍 Cobrinha Infinita PRO
+# 🐍 Python Snake
 
 Um jogo da cobrinha que comecei em Python e evoluí até uma versão completa para Web — com loja de skins, temas animados, ranking global e progresso salvo na nuvem.
 
@@ -9,7 +9,7 @@ Um jogo da cobrinha que comecei em Python e evoluí até uma versão completa pa
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 
-🎮 **[JOGAR AGORA](https://diegoalvesds.github.io/Cobrinha-/)** — funciona no PC e no celular!
+🎮 **[JOGAR AGORA](https://diegoalvesds.github.io/python-snake/)** — funciona no PC e no celular!
 
 ---
 
@@ -56,7 +56,7 @@ Cada maçã vale moedas 🪙 e pontos que viram XP ⭐ — suba de nível para d
 É só clonar (ou baixar) e abrir o `index.html` no navegador:
 
 ```bash
-git clone https://github.com/DiegoAlvesDs/Cobrinha-.git
+git clone https://github.com/DiegoAlvesDs/python-snake.git
 ```
 
 Não precisa instalar nada — o jogo roda 100% no navegador.
