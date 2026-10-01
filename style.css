@@ -6,7 +6,6 @@
     -webkit-tap-highlight-color: transparent;
 }
 :root{
-    --radius: 16px;
     --radius-sm: 12px;
     --shadow-soft: 0 20px 45px -20px rgba(0, 0, 0, .55);
     --shadow-lift: 0 10px 22px -12px rgba(0, 0, 0, .6);
@@ -144,7 +143,7 @@ header button{
     from{ opacity: 0; transform: translateY(6px); }
     to{ opacity: 1; transform: translateY(0); }
 }
-#home:not(.hide),#menuTema:not(.hide),#menuDiff:not(.hide),#menuModo:not(.hide),#menuSkins:not(.hide),#ranking:not(.hide),#game:not(.hide){
+#home:not(.hide),#menuSkins:not(.hide),#ranking:not(.hide),#game:not(.hide),#historiaNiveis:not(.hide),#historiaCutscene:not(.hide),#historiaEpilogo:not(.hide),#devPanel:not(.hide){
     animation: fadeIn .28s ease;
 }
 .screen{
@@ -278,7 +277,7 @@ header button{
 .optionGroup > label{
     display: block;
     font-size: 11px;
-    color: var(--muted, rgba(255, 255, 255, .55));
+    color: rgba(255, 255, 255, .55);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 9px;
@@ -286,7 +285,7 @@ header button{
     padding-left: 2px;
 }
 
-/* grade de temas (17 swatches) */
+/* grade de temas */
 .temaGrid{
     display: flex;
     flex-wrap: wrap;
@@ -357,7 +356,6 @@ header button{
     padding: 0 3px;
 }
 
-/* dificuldade / modo de mapa em grade, ao invés de coluna */
 .pillGridInline{
     flex-direction: row !important;
     flex-wrap: wrap;
@@ -373,7 +371,7 @@ header button{
 }
 
 /* =========================================================
-   LISTAS DE OPÇÃO (dificuldade / modo de mapa)
+   LISTAS DE OPÇÃO
 ========================================================= */
 .listaOpcoes{
     display: flex;
@@ -499,9 +497,6 @@ header button{
     height: 100%;
     border-radius: inherit;
 }
-/* Olho da prévia — só aparece no celular, no canto do
-   quadradinho. Toque abre a prévia grande daquela skin;
-   toque de novo fecha. No PC continua tudo como era. */
 .btnOlhoPrev{
     position: absolute;
     top: 2px;
@@ -561,19 +556,19 @@ body.plataforma-mobile #alternarPrevia{ display: none; }
     body.mostrandoSkins #previaGrande{ display: flex; }
 }
 
-/* skins (mesmos nomes de classe usados pelo script.js) */
+/* skins */
 .previa-Solida{ background: #00c060; }
 .previa-Listrada{ background: repeating-linear-gradient(45deg, #00c060, #00c060 6px, #007a3c 6px, #007a3c 12px); }
 .previa-Retro{ background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.25), transparent 60%), #00c060; border: 3px solid #000; }
 .previa-Gradiente{ background: linear-gradient(135deg, #00c060, #002010); }
 .previa-Gelo{ background: linear-gradient(135deg, #b6e6ff, #5aa0d8 55%, #28719e); box-shadow: inset 0 0 0 1px rgba(235, 252, 255, .8), 0 0 10px 2px rgba(159, 220, 255, .5); }
 .previa-Neon{ background: #00e0e0; box-shadow: 0 0 12px 3px #00e0e0; }
-.previa-Espinhada{ background: linear-gradient(135deg, #ff7060, #ff4020 50%, #c02010); clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 15%); }
+.previa-Espinhada{ background: linear-gradient(180deg, #5c2b28, #3a1f1f 60%, #2a1414); box-shadow: inset 0 0 0 1px rgba(216, 203, 176, .3); }
+.previa-Camuflada{ background: #3d4d2c; background-image: radial-gradient(ellipse 8px 6px at 22% 28%, #26311a, transparent 70%), radial-gradient(ellipse 8px 6px at 68% 24%, #5a6b3a, transparent 70%), radial-gradient(ellipse 8px 6px at 30% 68%, #5a6b3a, transparent 70%), radial-gradient(ellipse 8px 6px at 72% 66%, #26311a, transparent 70%); }
 .previa-Fantasma{ background: rgba(200, 200, 255, .4); border-color: rgba(200, 200, 255, .9); }
 .previa-ArcoIris{ background: linear-gradient(90deg, #ff3b3b, #ff9f3b, #f6ff3b, #3bff57, #3bb0ff, #8a3bff); }
 .previa-Metalica{ background: linear-gradient(135deg, #ffffff, #8a8a94, #ffffff); }
-.previa-Fogo{ background: linear-gradient(0deg, #8a1a00, #e83c08 40%, #ff9600 75%, #ffdc3c); box-shadow: 0 0 12px 3px rgba(255, 122, 31, .6); }
-.previa-Camuflada{ background: #3a4d2b; background-image: radial-gradient(ellipse 8px 6px at 20% 30%, #6b7a45, transparent 70%), radial-gradient(ellipse 9px 6px at 70% 60%, #23301a, transparent 70%), radial-gradient(ellipse 7px 5px at 45% 80%, #4a5c33, transparent 70%), radial-gradient(ellipse 8px 6px at 85% 15%, #2e3b22, transparent 70%); box-shadow: inset 0 0 0 2px rgba(20, 26, 14, .5); }
+.previa-Fogo{ background: linear-gradient(0deg, #7a1400, #e8480a 55%, #ffb020); }
 .previa-Dourada{ background: linear-gradient(135deg, #8a6410, #ffd75a 35%, #fff3c4 50%, #e8b23a 65%, #6e4e0a); box-shadow: 0 0 10px 2px rgba(255, 207, 64, .55); }
 .previa-Toxica{ background: linear-gradient(180deg, #96ff32, #5ec414 50%, #2e6e08); box-shadow: 0 0 14px 3px #7cff2b; }
 .previa-Estelar{ background: radial-gradient(circle at 30% 30%, #fff 0 2px, transparent 3px), radial-gradient(circle at 70% 60%, #fff 0 2px, transparent 3px), radial-gradient(circle at 50% 80%, #fff 0 2px, transparent 3px), linear-gradient(160deg, #1c1848, #0c0a24); }
@@ -586,7 +581,7 @@ body.plataforma-mobile #alternarPrevia{ display: none; }
 .previa-Sanguinea{ background: radial-gradient(circle at 50% 45%, #dc1e3c, #7a0413 55%, #3c0208); box-shadow: 0 0 12px 3px rgba(192, 0, 24, .6); }
 .previa-Realeza{ background: radial-gradient(circle at 30% 28%, #8a3ff0, #3a0a5c 62%, #1c0530); box-shadow: inset 0 0 0 1px rgba(255, 214, 90, .55), 0 0 8px rgba(255, 214, 90, .25); }
 .previa-Marinha{ background: linear-gradient(135deg, #00285a, #0082b4); }
-.previa-Celestial{ background: radial-gradient(circle at 50% 50%, #ffdf8a 0 8%, transparent 30%), conic-gradient(from 0deg, rgba(255, 230, 150, .35) 0 8%, transparent 8% 17%, rgba(255, 230, 150, .35) 17% 25%, transparent 25% 33%, rgba(255, 230, 150, .35) 33% 42%, transparent 42% 50%, rgba(255, 230, 150, .35) 50% 58%, transparent 58% 67%, rgba(255, 230, 150, .35) 67% 75%, transparent 75% 83%, rgba(255, 230, 150, .35) 83% 92%, transparent 92%), linear-gradient(180deg, #1a1f4e, #283a7a 55%, #0c1030); }
+.previa-Celestial{ background: radial-gradient(circle at 50% 50%, #ffdf8a 0 8%, transparent 30%), linear-gradient(180deg, #1a1f4e, #283a7a 55%, #0c1030); }
 .previa-Fenix{ background: radial-gradient(circle at 50% 50%, #fff6d0, #ffb020 40%, #ff5500 75%, #a01400); box-shadow: 0 0 14px 3px #ff6a00; }
 .previa-Dragao{ background: radial-gradient(circle at 50% 64%, rgba(255, 150, 40, .8) 0 6%, transparent 14%), linear-gradient(135deg, #062413, #2c8046 45%, #051c0e); box-shadow: 0 0 0 2px rgba(255, 215, 90, .5) inset; }
 .previa-Cavaleiro{ background: linear-gradient(135deg, #61656e, #c9cfda 50%, #43464e); box-shadow: 0 0 0 2px rgba(190, 20, 40, .5) inset; }
@@ -842,9 +837,6 @@ canvas{
     transform: scale(.9);
     box-shadow: inset 0 2px 8px rgba(0, 0, 0, .4);
 }
-/* Adaptação por plataforma: no PC o D-pad some (joga
-   com teclado/mouse); no mobile ele fica maior e mais
-   confortável para os dedos. */
 body.plataforma-pc #dpad{
     display: none;
 }
@@ -913,7 +905,6 @@ header > b{
     font-size: 11px;
     opacity: .55;
 }
-/* barra de rolagem discreta dentro do painel */
 #notasAtualizacao::-webkit-scrollbar{ width: 8px; }
 #notasAtualizacao::-webkit-scrollbar-track{ background: transparent; }
 #notasAtualizacao::-webkit-scrollbar-thumb{
@@ -935,7 +926,7 @@ header > b{
     border-left-color: #a78bfa;
     background: linear-gradient(160deg, rgba(167, 139, 250, .08), rgba(255, 255, 255, .02));
 }
-.notaItem b{
+.notaItem > b{
     display: block;
     font-size: 13.5px;
     margin-bottom: 4px;
@@ -946,7 +937,6 @@ header > b{
     line-height: 1.55;
     opacity: .85;
 }
-/* novidades do dia: destaque dourado + etiqueta de versão */
 .notaItem.novo{
     border-left-color: #fbbf24;
     background: linear-gradient(160deg, rgba(251, 191, 36, .09), rgba(255, 255, 255, .02));
@@ -972,14 +962,9 @@ header > b{
     border-color: rgba(251, 191, 36, .5);
     color: #fde68a;
 }
-/* Painel automático só em tela GRANDE (monitor). Em
-   notebooks (telas menores) ele fica muito grande, então
-   lá fica escondido e abre pelo botão "Novidades". */
 @media (min-width: 1400px){
     body:has(#home:not(.hide)) #notasAtualizacao:not(.fechada){ display: block; }
 }
-/* Em telas menores (celular E notebook) o botão abre
-   as notas em painel sobreposto, com botão de fechar. */
 @media (max-width: 1399px){
     #notasAtualizacao.aberta{
         display: block;
@@ -1005,9 +990,6 @@ header > b{
     cursor: pointer;
     transition: background .15s ease, transform .1s ease;
 }
-/* O botão some só em tela GRANDE (monitor), onde o painel
-   já aparece sozinho. Em notebook e celular ele fica
-   visível. Regra dupla: largura de tela E plataforma. */
 @media (min-width: 1400px){
     .btnNotas{ display: none; }
     body.plataforma-pc .btnNotas{
@@ -1037,7 +1019,6 @@ header > b{
 @media (max-width: 1399px){
     .btnFecharNotas{ display: block; }
 }
-/* Prévia grande ligada pelo botão (útil no celular) */
 @media (max-width: 899px){
     body.previaLigada #previaGrande{
         display: flex;
@@ -1289,7 +1270,7 @@ header > b{
 /* =========================================================
    ESCOLHA DE NICK (uma vez só)
 ========================================================= */
-#modalNick{
+#modalNick,#modalDev{
     position: fixed;
     inset: 0;
     background: rgba(2, 6, 4, .72);
@@ -1301,7 +1282,7 @@ header > b{
     overflow-y: auto;
     touch-action: pan-y;
 }
-#modalNick > div{
+#modalNick > div,#modalDev > div{
     width: min(390px, 92vw);
     padding: 28px 24px;
     background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 82%, white 4%), color-mix(in srgb, var(--bg) 88%, black 10%));
@@ -1311,20 +1292,20 @@ header > b{
     box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .75), 0 0 0 1px rgba(255, 255, 255, .04) inset, 0 0 40px -10px color-mix(in srgb, var(--border) 30%, transparent);
     animation: popIn .28s ease;
 }
-#modalNick h2{
+#modalNick h2,#modalDev h2{
     font-family: 'Press Start 2P', monospace;
     font-size: 22px;
     margin: 0 0 12px;
     letter-spacing: .5px;
     text-shadow: 0 0 20px color-mix(in srgb, var(--border) 40%, transparent);
 }
-#modalNick .loginSub{
+#modalNick .loginSub,#modalDev .loginSub{
     margin: 0 0 18px;
     font-size: 12.5px;
     line-height: 1.55;
     opacity: .85;
 }
-#modalNick input{
+#modalNick input,#modalDev input{
     display: block;
     width: 100%;
     height: 50px;
@@ -1337,7 +1318,7 @@ header > b{
     outline: 0;
     padding: 10px;
 }
-#modalNick input:focus{
+#modalNick input:focus,#modalDev input:focus{
     border-color: var(--border);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--border) 25%, transparent);
 }
@@ -1356,4 +1337,197 @@ header > b{
 }
 .btnFecharNick:hover{
     opacity: 1;
+}
+
+/* =========================================================
+   MODO HISTÓRIA
+========================================================= */
+.btnHistoriaHome{
+    width: min(370px, 90vw);
+    margin: 0 auto 18px;
+    display: block;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--border) 30%, transparent), rgba(255, 255, 255, .04));
+    border-color: var(--border);
+    font-weight: 700;
+}
+.historiaProgresso{
+    opacity: .7;
+    font-size: 12.5px;
+    margin: -10px 0 20px;
+}
+.historiaNiveisGrid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    width: min(560px, 94vw);
+    margin: 0 auto 22px;
+}
+.botaoFaseHistoria{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 14px;
+    text-align: left;
+    min-height: 64px;
+}
+.botaoFaseHistoria .faseNumero{
+    font-size: 11px;
+    opacity: .75;
+    font-weight: 700;
+    letter-spacing: .3px;
+}
+.botaoFaseHistoria .faseNome{
+    font-size: 13px;
+    font-weight: 600;
+}
+.botaoFaseHistoria.completa{
+    border-color: #ffd75a;
+    background: linear-gradient(135deg, rgba(255, 215, 90, .16), rgba(255, 255, 255, .03));
+    box-shadow: 0 0 16px -6px rgba(255, 215, 90, .55);
+}
+.botaoFaseHistoria.bloqueada{
+    opacity: .4;
+    cursor: not-allowed;
+}
+.botaoFaseHistoria.bloqueada:hover{
+    transform: none;
+}
+
+/* Cutscene */
+.cutsceneCard{
+    width: min(480px, 92vw);
+    margin: 30px auto 0;
+    padding: 30px 26px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .015));
+    border: 1px solid color-mix(in srgb, var(--border) 45%, transparent);
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    animation: fadeIn .4s ease;
+}
+.cutsceneCobrinha{
+    font-size: 46px;
+    margin-bottom: 6px;
+    animation: cutsceneFlutuar 2.6s ease-in-out infinite;
+}
+@keyframes cutsceneFlutuar{
+    0%, 100%{ transform: translateY(0) rotate(-4deg); }
+    50%{ transform: translateY(-10px) rotate(4deg); }
+}
+.cutsceneTexto{
+    font-size: 14px;
+    line-height: 1.65;
+    opacity: .9;
+    margin: 10px 0 18px;
+    animation: fadeIn .6s ease .15s both;
+}
+.cutsceneObjetivo{
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--border);
+    margin-bottom: 22px;
+    text-shadow: 0 0 12px color-mix(in srgb, var(--border) 50%, transparent);
+}
+#historiaCutsceneComecar{
+    background: linear-gradient(135deg, var(--border), color-mix(in srgb, var(--border) 60%, var(--c2, var(--border))));
+    color: #06110b;
+    font-weight: 700;
+    border: none;
+}
+
+.cutsceneLabelDificuldade{
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: .6;
+    text-align: left;
+    margin: 0 0 8px;
+}
+.cutsceneDificuldade{
+    margin-bottom: 18px;
+}
+
+.cutsceneCanvas{
+    display: block;
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    aspect-ratio: 380 / 90;
+    margin: 0 auto 10px;
+    border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+    box-shadow: var(--shadow-lift);
+}
+
+.notaItem p b{
+    display: inline;
+    font-size: inherit;
+    margin: 0;
+}
+
+/* =========================================================
+   MODO DEV (painel privado)
+========================================================= */
+.devAviso{
+    width: min(460px, 92vw);
+    margin: 0 auto 16px !important;
+    line-height: 1.5;
+}
+.devCampos{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: min(460px, 92vw);
+    margin: 0 auto 16px;
+}
+.devLinha{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, .035);
+    border: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
+    text-align: left;
+}
+.devRotulo{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.devRotulo small{
+    display: block;
+    margin: 0;
+    font-size: 10.5px;
+    font-weight: 400;
+    opacity: .55;
+}
+.screen .devLinha input{
+    width: 110px;
+    height: 40px;
+    margin: 0;
+    flex-shrink: 0;
+}
+.devToggle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: min(460px, 92vw);
+    margin: 0 auto 12px;
+    font-size: 13.5px;
+    cursor: pointer;
+}
+.screen .devToggle input[type="checkbox"]{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--border);
 }
