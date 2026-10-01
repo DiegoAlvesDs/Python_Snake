@@ -9,12 +9,12 @@
     <title>Cobrinha Infinita PRO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=33">
+    <link rel="stylesheet" href="style.css?v=39">
 </head>
 <body>
     <div class="app">
         <header>
-            <b>🐍 Feito Por Diego</b>
+            <b id="tituloHeader">🐍 Feito Por Diego</b>
             <span>
                 <button id="menu">☰</button>
                 <button id="pause">Ⅱ</button>
@@ -46,6 +46,7 @@
                 <button id="openSkins">💎 Skins</button>
                 <button id="rank">🏆 Ranking</button>
             </div>
+            <button id="openHistoria" class="btnHistoriaHome">📖 Modo História</button>
             <button id="abrirNotas" class="btnNotas">📋 Novidades da versão</button>
             <div class="optionGroup">
                 <label>Tema</label>
@@ -71,23 +72,88 @@
             <h3>📋 ATUALIZAÇÕES</h3>
             <p class="notasSub">Tudo que mudou no jogo, do mais recente pro mais antigo</p>
             <div class="notaItem novo">
+                <span class="notaTag">v39</span>
+                <b>🗺️ Mapas da História sem encolher errado</b>
+                <p>Corrigido: fases com mapa maior que 75 (como a 3, 11 e 15) encolhiam de cara nos primeiros segundos. Agora o mapa começa no tamanho certo da fase e só diminui com o tempo, como nos outros modos.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v38</span>
+                <b>🔥 História bem mais difícil</b>
+                <p>Objetivos ficaram mais apertados e ganharam variedade: agora tem desafios de <b>sobreviver poucos segundos</b> e o novo tipo <b>"coma X maçãs em Y segundos"</b> (a Fase 19 pede <b>15 maçãs em 10 segundos</b>!). Se o tempo acabar, a fase falha.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v38</span>
+                <b>🐍 Cobras inimigas: fases de fuga</b>
+                <p>Várias fases agora têm <b>cobras inimigas</b> te caçando pelo mapa. Encostou em uma, acabou — a ideia é fugir enquanto cumpre o objetivo. Elas aparecem avisadas na cutscene antes da fase.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v38</span>
+                <b>🎬 Cutscenes animadas</b>
+                <p>As cutscenes deixaram de ser só texto: agora tem um mini vídeo com o cenário do tema, o brilho-guia pulsando, a cobrinha em movimento (e as sombras inimigas atrás dela nas fases de fuga), com a história aparecendo como legenda, palavra por palavra.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v37</span>
+                <b>🗺️ Mapas e tamanhos variados nas 20 fases</b>
+                <p>Cada fase da História agora tem seu próprio tamanho de mapa e seu próprio modo (Sem Parede, Obstáculos, Espelho, Caos, Infinito, Gigante...) — nada mais de mapa igual toda hora.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v37</span>
+                <b>🎚️ Escolha a dificuldade de cada fase</b>
+                <p>Antes de começar qualquer fase da História, agora dá pra escolher entre <b>Normal</b> ou <b>Insano</b> na tela da cutscene.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v37</span>
+                <b>🏡 Epílogo da história</b>
+                <p>Ao concluir a Fase 20, uma cutscene final fecha a jornada da cobrinha até encontrar seu ninho de volta no Cosmos.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v36</span>
+                <b>🗺️ Só ficou o Cosmos</b>
+                <p>Removemos os cenários animados de Abismo, Vulcão, Tempestade, Retrô e Sakura. Agora o único tema com cenário totalmente animado é o <b>Cosmos</b>.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v36</span>
+                <b>🐢 Sistema de nível mais lento (−5%)</b>
+                <p>A cobra agora acelera um pouco mais devagar conforme o nível sobe durante a partida — ficou uns 5% mais tranquilo de acompanhar.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v36</span>
+                <b>📖 Cada fase da História com seu próprio ritmo</b>
+                <p>Além do objetivo, agora cada uma das 20 fases do Modo História tem sua própria velocidade — algumas mais lentas pra explorar, outras bem mais tensas.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v35</span>
+                <b>📖 Modo História</b>
+                <p>Chegou o Modo História, com 20 fases e uma cutscene curta antes de cada uma. A cobrinha perdeu seu ninho numa tempestade cósmica e atravessa terras diferentes até achar o caminho de volta pra casa. Progresso salvo à parte do modo arcade.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v34</span>
+                <b>⚡ Jogo otimizado</b>
+                <p>Reduzimos bastante o uso de efeitos pesados no desenho da cobra e dos cenários animados. Cobras compridas agora desenham muito mais rápido, e os mapas animados ficaram bem mais leves.</p>
+            </div>
+            <div class="notaItem">
+                <span class="notaTag">v34</span>
+                <b>🎨 3 skins redesenhadas</b>
+                <p>Espinhada, Camuflada e Fogo ganharam um visual novo.</p>
+            </div>
+            <div class="notaItem">
                 <span class="notaTag">v32</span>
                 <b>🌈 Maçã colorida caprichada</b>
                 <p>A maçã RGB saiu do quadradinho e virou fruta de verdade: corpo redondo com brilho, reflexo, cabinho e folha — e o <b>arco-íris girando</b> sem parar. As maçãs normais também ficaram mais brilhantes, na medida certa pra não atrapalhar.</p>
             </div>
-            <div class="notaItem novo">
+            <div class="notaItem">
                 <span class="notaTag">v31</span>
                 <b>🍎 Mais maçãs na tela</b>
                 <p>O modo <b>Clássico</b> agora tem <b>6 maçãs</b> ao mesmo tempo, e todos os outros modos têm <b>4</b>. Mais ação e menos espera!</p>
             </div>
-            <div class="notaItem novo">
+            <div class="notaItem">
                 <span class="notaTag">v30</span>
                 <b>✅ Gigante 2x 100% testado</b>
                 <p>Testamos <b>todas as 50 skins</b> no modo Gigante 2x: colisão, desenho e brilho — tudo funcionando. Lembrando: lá a cobra tem <b>2 células de largura</b>, então encostou, morreu!</p>
             </div>
             <div class="notaItem">
                 <b>🗺️ 6 temas novos com cenário vivo!</b>
-                <p>Chegaram <b>Abismo</b> (fundo do mar com águas-vivas e cardumes), <b>Vulcão</b> (lava, brasas e fumaça), <b>Tempestade</b> (chuva, vento e relâmpagos), <b>Retrô</b> (sol listrado anos 80 com grade em perspectiva), <b>Sakura</b> (cerejeiras, pétalas caindo e vaga-lumes) — e o Cosmos agora é vizinho deles. Todos ficaram nas <b>últimas linhas da lista de temas</b>!</p>
+                <p>Chegaram <b>Abismo</b> (fundo do mar), <b>Vulcão</b> (lava e brasas), <b>Tempestade</b> (chuva e relâmpagos), <b>Retrô</b> (sol listrado anos 80), <b>Sakura</b> (cerejeiras e pétalas caindo) — e o Cosmos agora é vizinho deles. Todos ficaram nas <b>últimas linhas da lista de temas</b>!</p>
             </div>
             <div class="notaItem">
                 <b>👁 Prévia no olhinho (celular)</b>
@@ -99,7 +165,7 @@
             </div>
             <div class="notaItem">
                 <b>🌌 Tema novo: Cosmos</b>
-                <p>Saiu o Outono, entrou o Cosmos: céu de espaço profundo com buraco negro girando, 70 estrelas, galáxias espirais, constelações que se acendem, estrela cadente, cometa, nebulosas respirando e planeta com anéis e luas. Tudo animado atrás da partida!</p>
+                <p>Saiu o Outono, entrou o Cosmos: céu de espaço profundo animado atrás da partida.</p>
             </div>
             <div class="notaItem">
                 <b>🍎 Maçã e mapa caprichados</b>
@@ -114,8 +180,8 @@
                 <p>Cada skin mostra uma <b>simulação de verdade</b> ao lado do menu: uma cobrinha IA andando, caçando a maçã e crescendo com a skin escolhida. Passe o mouse numa skin da lista para testar na hora!</p>
             </div>
             <div class="notaItem">
-                <b>✨ 20 skins refeitas e animadas</b>
-                <p>Samurai Carmesim, Cavaleiro Medieval, Realeza, Dragão Ancestral, Dourada, Fogo, Espinhosa, Vulcão, Circuito Neon, Plasma, Rúnico, Estelar, Celestial, Aurora, Sombria, Elétrica, Obsidiana, Pixel Art, Abóbora Maldita e Natalina — todas com efeitos novos: brilhos, faíscas, relâmpagos, neve e mais.</p>
+                <b>✨ Skins refeitas e animadas</b>
+                <p>Samurai Carmesim, Cavaleiro Medieval, Realeza, Dragão Ancestral, Dourada, Espinhosa, Vulcão, Circuito Neon, Plasma, Rúnico, Estelar, Celestial, Aurora, Sombria, Elétrica, Obsidiana, Pixel Art, Abóbora Maldita e Natalina — todas com efeitos novos.</p>
             </div>
             <div class="notaItem">
                 <b>🖥️ Mais espaço na partida</b>
@@ -124,6 +190,51 @@
         </aside>
 
         <!-- MENU: SKINS -->
+        <!-- MODO HISTÓRIA: SELEÇÃO DE FASES -->
+        <section id="historiaNiveis" class="screen hide">
+            <h2>📖 MODO HISTÓRIA</h2>
+            <p id="historiaProgressoTexto" class="historiaProgresso">0 / 20 fases concluídas</p>
+            <div id="historiaNiveisLista" class="historiaNiveisGrid"></div>
+            <button id="historiaVoltarHome">← MENU</button>
+        </section>
+
+        <!-- MODO HISTÓRIA: CUTSCENE -->
+        <section id="historiaCutscene" class="screen hide">
+            <div class="cutsceneCard">
+                <canvas id="historiaCutsceneCanvas" class="cutsceneCanvas" width="380" height="90"></canvas>
+                <h2 id="historiaCutsceneTitulo">Fase 1</h2>
+                <p id="historiaCutsceneTexto" class="cutsceneTexto"></p>
+                <p id="historiaCutsceneObjetivo" class="cutsceneObjetivo"></p>
+                <label class="cutsceneLabelDificuldade">Dificuldade</label>
+                <div id="historiaCutsceneDificuldade" class="listaOpcoes pillGridInline cutsceneDificuldade"></div>
+                <button id="historiaCutsceneComecar">▶ COMEÇAR FASE</button>
+                <button id="historiaCutsceneVoltar" class="btnFecharNick">← Voltar às fases</button>
+            </div>
+        </section>
+
+        <!-- MODO HISTÓRIA: EPÍLOGO -->
+        <section id="historiaEpilogo" class="screen hide">
+            <div class="cutsceneCard">
+                <div class="cutsceneCobrinha">🏡</div>
+                <h2>Fim da Jornada</h2>
+                <p class="cutsceneTexto">A cobrinha finalmente cruza a última fronteira e encontra seu ninho, girando devagar entre as estrelas do Cosmos. A tempestade que a separou de casa já não importa mais — o caminho de volta valeu cada fase. Obrigado por jogar até aqui!</p>
+                <button id="historiaEpilogoVoltar">📖 VOLTAR ÀS FASES</button>
+            </div>
+        </section>
+
+        <!-- MODO DEV (privado) -->
+        <section id="devPanel" class="screen hide">
+            <h2>🛠 MODO DESENVOLVEDOR</h2>
+            <p class="devAviso">Com o modo dev <b>ativo</b>, a partida é não oficial: <b>não entra no ranking</b>, não soma moedas/XP e não salva progresso da História.</p>
+            <label class="devToggle"><input type="checkbox" id="devAtivo"> <span>Ativar essas configurações nas partidas</span></label>
+            <div id="devCampos" class="devCampos"></div>
+            <label class="devToggle"><input type="checkbox" id="devSemEncolher"> <span>Mapa nunca encolhe</span></label>
+            <label class="devToggle"><input type="checkbox" id="devDesbloquearFases"> <span>Liberar todas as fases da História</span></label>
+            <button id="devRestaurar">↺ Restaurar padrões</button>
+            <button id="devSair">🔒 Sair do modo dev</button>
+            <button id="devVoltar">← VOLTAR</button>
+        </section>
+
         <section id="menuSkins" class="screen hide">
             <h2>💎 SKINS</h2>
             <div class="statusBar">
@@ -229,8 +340,18 @@
             <button id="pularNick" class="btnFecharNick">Escolher depois</button>
         </div>
     </div>
+    <div id="modalDev" class="hide">
+        <div>
+            <h2>🛠 DEV</h2>
+            <p class="loginSub">Área restrita. Digite a senha.</p>
+            <input id="devSenha" type="password" placeholder="Senha" autocomplete="off">
+            <p id="devMensagem" class="loginMensagem erro hide"></p>
+            <button id="devEntrar" class="btnEmail">Entrar</button>
+            <button id="devCancelar" class="btnFecharNick">Cancelar</button>
+        </div>
+    </div>
     <div id="authBadgeRodape" class="authBadgeRodape hide"></div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js?v=33"></script>
+    <script src="script.js?v=39"></script>
 </body>
 </html>
