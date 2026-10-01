@@ -2662,7 +2662,7 @@ const HISTORIA_NIVEIS = [
         historia: 'O calor do deserto é sufocante e a areia engole os passos rápido demais. Resistir aqui é o primeiro verdadeiro teste da jornada.' },
     { id: 4, nome: 'Ecos do Mar', tema: 'Oceano', dificuldade: 'Normal', modo: 'Classico', mapa: 70, velocidade: 1.0, objetivo: { tipo: 'macasEmTempo', macas: 8, tempo: 20 },
         historia: 'A costa aparece de repente. Nas ondas, ecoa um som familiar — parecido com uma canção que a cobrinha jura já ter ouvido em casa. Precisa se apressar antes da maré subir.' },
-    { id: 5, nome: 'Frio Cortante', tema: 'Gelo', dificuldade: 'Insano', modo: 'Obstaculos', mapa: 65, velocidade: 1.05, objetivo: { tipo: 'pontos', valor: 55 },
+    { id: 5, nome: 'Frio Cortante', tema: 'Gelo', dificuldade: 'Insano', modo: 'Obstaculos', mapa: 65, velocidade: 1.05, objetivo: { tipo: 'pontos', valor: 36 },
         historia: 'Um campo gelado se estende até onde a vista alcança. O brilho no horizonte pulsa mais forte aqui — está cada vez mais perto.' },
     { id: 6, nome: 'Sob o Pôr do Sol', tema: 'PorDoSol', dificuldade: 'Normal', modo: 'Classico', mapa: 70, velocidade: 1.0, objetivo: { tipo: 'macas', valor: 16 },
         historia: 'O céu incendeia em laranja e rosa. Por um instante, a cobrinha para só para admirar — e sente falta de casa mais do que nunca.' },
