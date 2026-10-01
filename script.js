@@ -1828,7 +1828,7 @@ function ajustarObstaculos() {
         if (ox >= mapSize || oy >= mapSize) obstacles.delete(chave);
     });
     const centro = Math.floor(mapSize / 2);
-    const qtdAlvo = Math.floor(mapSize * mapSize * 0.025);
+    const qtdAlvo = Math.floor(mapSize * mapSize * 0.0125);
     let tentativas = 0;
     while (obstacles.size < qtdAlvo && tentativas < 500) {
         tentativas++;
@@ -2377,7 +2377,7 @@ function draw() {
             const [ox, oy] = key.split(',').map(Number);
             const obsX = area.x + ox * cell, obsY = area.y + oy * cell;
             const obsT = Math.ceil(cell) + 1;
-            ctx.fillStyle = '#43464e';
+            ctx.fillStyle = '#000000';
             ctx.fillRect(obsX, obsY, obsT, obsT);
             ctx.fillStyle = 'rgba(255, 255, 255, .16)';
             ctx.fillRect(obsX, obsY, obsT, Math.max(1, cell * 0.14));
