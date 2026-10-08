@@ -45,7 +45,7 @@ O que começou como um projeto em Python evoluiu para uma experiência completa 
 
 | 🐍 | 🎨 | 🗺️ | 🏆 |
 |:---:|:---:|:---:|:---:|
-| **50+ skins** | **23 temas** | **9 modos** | **Ranking global** |
+| **50+ skins** | **18 temas** | **9 modos** | **Ranking global** |
 | Colecione estilos | Explore cenários | Domine regras novas | Conquiste seu lugar |
 
 </div>
