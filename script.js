@@ -336,7 +336,7 @@ function modoEncolheMapa() {
 function quantidadeMacas() {
     const dq = devVal('qtdMacas');
     if (dq) return dq;
-    return (mapMode === 'Classico') ? 6 : 4;
+    return (mapMode === 'Classico') ? 28 : 20;
 }
 
 /* =========================================================
